@@ -1,9 +1,30 @@
 #include <Python.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "dsmapitd.h"      /* Tivoli Storage Manager API type definitions                */
 #include "dsmapifp.h"      /* Tivoli Storage Manager API function prototypes.            */
 #include "dsmrc.h"         /* Tivoli Storage Manager API return codes.                   */
+
+#define ERR_MAX 100
+
+PyObject * TivsmAPIError = NULL;
+
+void setError(int rc) {
+    char errorMessage[ERR_MAX];
+    switch(rc){
+        case DSM_RC_ACCESS_DENIED:
+            sprintf(errorMessage, "API Error: DSM_RC_ACCESS_DENIED (%i)", rc);
+            break;
+        case DSM_RC_NO_OPT_FILE:
+            sprintf(errorMessage, "API Error: DSM_RC_NO_OPT_FILE (%i)", rc);
+            break;
+        default:
+            sprintf(errorMessage, "API Error: %i", rc);
+    }
+
+    PyErr_SetString(TivsmAPIError, errorMessage);
+}
 
 static PyObject * dsmInit_wrapper(PyObject * self, PyObject * args, PyObject * keywds)
 {
@@ -31,17 +52,18 @@ static PyObject * dsmInit_wrapper(PyObject * self, PyObject * args, PyObject * k
     dsmApiVersion.release = PyInt_AsLong(PyDict_GetItemString(apiVersion, "release"));
     dsmApiVersion.level = PyInt_AsLong(PyDict_GetItemString(apiVersion, "level"));
 
-    printf("clientNodeName: %s\n", clientNodeName);
-    printf("Version: %d.%d.%d\n", dsmApiVersion.version, dsmApiVersion.release, dsmApiVersion.level);
-
     rc = dsmInit(&dsmHandle, &dsmApiVersion, clientNodeName, NULL, clientPassword,
             applicationType, NULL, NULL);
 
-    printf("Handle: %d\n", dsmHandle);
+    // TODO: pass actual values or NULL if empty strings
     //rc = dsmInit(dsmHandle, &dsmApiVersion, clientNodeName, clientOwnerName, clientPassword,
     //        applicationType, configfile, options);
+    if(rc) {
+        setError(rc);
+        return NULL;
+    }
 
-    return Py_BuildValue("i", rc);
+    return Py_BuildValue("i", dsmHandle);
 }
 
 // http://www-304.ibm.com/support/knowledgecenter/SSGSG7_7.1.0/com.ibm.itsm.client.develop.doc/r_cmd_dsmqueryapiversion.html
@@ -75,11 +97,44 @@ static PyObject* dsmQueryApiVersionEx_wrapper(PyObject* self) {
     return dict;
 }
 
+static void dsmSetUp_wrapper(PyObject * self, PyObject * args, PyObject * keywds)
+{
+    // TODO: parse envDict and pass it to dsmSetUp()
+    /*
+    dsUint16_t stVersion;
+    char* dsmiDir;
+    char* dsmiConfig;
+    char* dsmiLog;
+    char** argv;
+    char* logName;
+    char* options;
+    bool reserved1 = false;
+    bool reserved2 = false;
+    */
+    PyObject * mtFlag = NULL;
+    PyObject * envDict = NULL;
+    int rc;
+
+    static char *kwlist[] = {"mtFlag", "envSetup"};
+
+    // parse arguments
+    if (!PyArg_ParseTupleAndKeywords(args, keywds, "OO", kwlist, &mtFlag, &envDict)) {
+    return;
+    }
+
+    rc = dsmSetUp(PyObject_IsTrue(mtFlag), NULL);
+
+    if(rc) {
+        setError(rc);
+        return;
+    }
+}
 
 static PyMethodDef TIVsmAPIMethods[] = {
-     { "dsmInit", (PyCFunction)dsmInit_wrapper, METH_KEYWORDS, "Query TSM API version" },
+     { "dsmInit", (PyCFunction)dsmInit_wrapper, METH_KEYWORDS, "Init TSM environment" },
      { "dsmQueryApiVersion", dsmQueryApiVersion_wrapper, METH_NOARGS, "Query TSM API version" },
      { "dsmQueryApiVersionEx", dsmQueryApiVersionEx_wrapper, METH_NOARGS, "Query TSM API version" },
+     { "dsmSetUp", (PyCFunction)dsmSetUp_wrapper, METH_KEYWORDS, "Set up TSM environment" },
       { NULL, NULL, 0, NULL }
 };
 
@@ -87,11 +142,20 @@ static void defConstants(PyObject *m) {
     PyModule_AddIntConstant (m, "DSM_RC_NO_OPT_FILE", DSM_RC_NO_OPT_FILE);
 }
 
+static void setupExceptions(PyObject *m) {
+    TivsmAPIError = PyErr_NewException("pytivsmapi.TivsmAPIError", NULL, NULL);
+    Py_INCREF(TivsmAPIError);
+    PyModule_AddObject(m, "TivsmAPIError", TivsmAPIError);
+}
+
 DL_EXPORT(void) initpytivsmapi(void)
 {
     PyObject *m;
-
     m = Py_InitModule("pytivsmapi", TIVsmAPIMethods);
+    if(m == NULL)
+        return;
+
     defConstants(m);
+    setupExceptions(m);
 }
 
