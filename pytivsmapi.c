@@ -126,6 +126,67 @@ static PyObject* dsmQueryApiVersionEx_wrapper(PyObject* self) {
     return dict;
 }
 
+static PyObject* dsmQuerySessInfo_wrapper(PyObject* self, PyObject * args) {
+    PyObject* dict = PyDict_New();
+    ApiSessInfo sessInfo;
+    dsUint32_t dsmHandle;
+    int rc;
+
+    memset(&sessInfo,0x00,sizeof(ApiSessInfo));
+    sessInfo.stVersion = ApiSessInfoVersion;
+
+    if (!PyArg_ParseTuple(args, "K", &dsmHandle)) {
+    return NULL;
+    }
+
+
+    if((rc = dsmQuerySessInfo(dsmHandle, &sessInfo)) != DSM_RC_OK) {
+       setError(rc);
+       return NULL;
+    }
+
+    // TODO: implement remaining fields
+    PyDict_SetItemString(dict, "stVersion", Py_BuildValue("I", sessInfo.stVersion));
+    PyDict_SetItemString(dict, "serverHost", Py_BuildValue("s", sessInfo.serverHost));
+    PyDict_SetItemString(dict, "serverPort", Py_BuildValue("I", sessInfo.serverPort));
+    //PyDict_SetItemString(dict, "dsmDate", Py_BuildValue("", sessInfo));
+    PyDict_SetItemString(dict, "serverType", Py_BuildValue("s", sessInfo.serverType));
+    PyDict_SetItemString(dict, "serverVer", Py_BuildValue("I", sessInfo.serverVer));
+    PyDict_SetItemString(dict, "serverRel", Py_BuildValue("I", sessInfo.serverRel));
+    PyDict_SetItemString(dict, "serverLev", Py_BuildValue("I", sessInfo.serverLev));
+    PyDict_SetItemString(dict, "serverSubLev", Py_BuildValue("I", sessInfo.serverSubLev));
+    PyDict_SetItemString(dict, "nodeType", Py_BuildValue("s", sessInfo.nodeType));
+    PyDict_SetItemString(dict, "fsdelim", Py_BuildValue("c", sessInfo.fsdelim));
+    PyDict_SetItemString(dict, "hldelim", Py_BuildValue("c", sessInfo.hldelim));
+    PyDict_SetItemString(dict, "compression", Py_BuildValue("I", sessInfo.compression));
+    PyDict_SetItemString(dict, "archDel", Py_BuildValue("I", sessInfo.archDel));
+    PyDict_SetItemString(dict, "backDel", Py_BuildValue("I", sessInfo.backDel));
+    PyDict_SetItemString(dict, "maxBytesPerTxn", Py_BuildValue("K", sessInfo.maxBytesPerTxn));
+    PyDict_SetItemString(dict, "maxObjPerTxn", Py_BuildValue("K", sessInfo.maxObjPerTxn));
+    PyDict_SetItemString(dict, "id", Py_BuildValue("s", sessInfo.id));
+    PyDict_SetItemString(dict, "owner", Py_BuildValue("s", sessInfo.owner));
+    PyDict_SetItemString(dict, "confFile", Py_BuildValue("s", sessInfo.confFile));
+    PyDict_SetItemString(dict, "opNoTrace", Py_BuildValue("I", sessInfo.opNoTrace));
+    PyDict_SetItemString(dict, "domainName", Py_BuildValue("s", sessInfo.domainName));
+    PyDict_SetItemString(dict, "policySetName", Py_BuildValue("s", sessInfo.policySetName));
+    //PyDict_SetItemString(dict, "polActDate", Py_BuildValue("", sessInfo));
+    PyDict_SetItemString(dict, "dfltMCName", Py_BuildValue("s", sessInfo.dfltMCName));
+    PyDict_SetItemString(dict, "gpBackRetn", Py_BuildValue("I", sessInfo.gpBackRetn));
+    PyDict_SetItemString(dict, "gpArchRetn", Py_BuildValue("I", sessInfo));
+    PyDict_SetItemString(dict, "adsmServerName", Py_BuildValue("s", sessInfo.adsmServerName));
+    PyDict_SetItemString(dict, "archiveRetentionProtection", sessInfo.archiveRetentionProtection ? Py_True : Py_False);
+    PyDict_SetItemString(dict, "maxBytesPerTxn_64", Py_BuildValue("K", sessInfo.maxBytesPerTxn_64));
+    PyDict_SetItemString(dict, "lanFreeEnabled", sessInfo.lanFreeEnabled ? Py_True : Py_False);
+    //PyDict_SetItemString(dict, "dedupType", Py_BuildValue("", sessInfo));
+    PyDict_SetItemString(dict, "accessNode", Py_BuildValue("s", sessInfo.accessNode));
+    //PyDict_SetItemString(dict, "failOverCfgType", Py_BuildValue("", sessInfo));
+    PyDict_SetItemString(dict, "replServerName", Py_BuildValue("s", sessInfo.replServerName));
+    PyDict_SetItemString(dict, "homeServerName", Py_BuildValue("s", sessInfo.homeServerName));
+    PyDict_SetItemString(dict, "replServerHost", Py_BuildValue("s", sessInfo.replServerHost));
+    PyDict_SetItemString(dict, "replServerPort", Py_BuildValue("I", sessInfo.replServerPort));
+    return dict;
+}
+
 static void dsmSetUp_wrapper(PyObject * self, PyObject * args, PyObject * keywds)
 {
     // TODO: parse envDict and pass it to dsmSetUp()
@@ -159,16 +220,13 @@ static void dsmSetUp_wrapper(PyObject * self, PyObject * args, PyObject * keywds
     }
 }
 
-static PyObject * dsmTerminate_wrapper(PyObject * self, PyObject * args, PyObject * keywds)
+static PyObject * dsmTerminate_wrapper(PyObject * self, PyObject * args)
 {
     dsUint32_t dsmHandle;
     int rc;
 
-    static char *kwlist[] = {"dsmHandle"};
-
     // parse arguments
-    if (!PyArg_ParseTupleAndKeywords(args, keywds, "K", kwlist, &dsmHandle)) {
-        printf("argument parsing failed");
+    if (!PyArg_ParseTuple(args, "K", &dsmHandle)) {
     return NULL;
     }
 
@@ -186,8 +244,9 @@ static PyMethodDef TIVsmAPIMethods[] = {
      { "dsmInit", (PyCFunction)dsmInit_wrapper, METH_KEYWORDS, "Init TSM session" },
      { "dsmQueryApiVersion", dsmQueryApiVersion_wrapper, METH_NOARGS, "Query TSM API version" },
      { "dsmQueryApiVersionEx", dsmQueryApiVersionEx_wrapper, METH_NOARGS, "Query TSM API version" },
+     { "dsmQuerySessInfo", dsmQuerySessInfo_wrapper, METH_VARARGS, "Query TSM session info" },
      { "dsmSetUp", (PyCFunction)dsmSetUp_wrapper, METH_KEYWORDS, "Set up TSM environment" },
-     { "dsmTerminate", (PyCFunction)dsmTerminate_wrapper, METH_KEYWORDS, "Terminate TSM session" },
+     { "dsmTerminate", dsmTerminate_wrapper, METH_VARARGS, "Terminate TSM session" },
       { NULL, NULL, 0, NULL }
 };
 
