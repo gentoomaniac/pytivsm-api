@@ -1,14 +1,14 @@
- pytivsm-api
+# pytivsm-api
 Python wrapper for Tivoli Storage Manager API
 
-# setting up environment
+## setting up environment
 ```
 DSMI_DIR=/opt/tivoli/tsm/client/api/bin64
 DSMI_CONFIG=/opt/tivoli/tsm/client/api/bin64/dsm.sys
 DSMI_LOG=/tmp/dsmapi.log
 ```
 
-# first example
+## first example
 ```python
 >>> import pytivsmapi
 >>> sess = pytivsmapi.dsmInit(dsmApiVersion=pytivsmapi.dsmQueryApiVersion())
@@ -20,7 +20,7 @@ True
 
 ```
 
-# implemented functions
+## implemented functions
 - dsmInit()
 - dsmQueryApiVersion()
 - dsmQueryApiVersionEx()
