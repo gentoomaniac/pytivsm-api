@@ -7,6 +7,7 @@
 #include "dsmrc.h"         /* Tivoli Storage Manager API return codes.                   */
 
 #define ERR_MAX 100
+static const char DATE_FORMAT[] = "%i-%02i-%02i %02i:%02i:%02i";
 
 PyObject * TivsmAPIError = NULL;
 
@@ -131,7 +132,11 @@ static PyObject* dsmQuerySessInfo_wrapper(PyObject* self, PyObject * args) {
     ApiSessInfo sessInfo;
     dsUint32_t dsmHandle;
     int rc;
+    char * date; // "2015-10-20 17:30:15"
 
+    date = malloc(sizeof(char)*20); // see example string above
+    if(!date)
+        return NULL;
     memset(&sessInfo,0x00,sizeof(ApiSessInfo));
     sessInfo.stVersion = ApiSessInfoVersion;
 
@@ -149,7 +154,9 @@ static PyObject* dsmQuerySessInfo_wrapper(PyObject* self, PyObject * args) {
     PyDict_SetItemString(dict, "stVersion", Py_BuildValue("I", sessInfo.stVersion));
     PyDict_SetItemString(dict, "serverHost", Py_BuildValue("s", sessInfo.serverHost));
     PyDict_SetItemString(dict, "serverPort", Py_BuildValue("I", sessInfo.serverPort));
-    //PyDict_SetItemString(dict, "dsmDate", Py_BuildValue("", sessInfo));
+    sprintf(date, DATE_FORMAT, sessInfo.serverDate.year, sessInfo.serverDate.month, sessInfo.serverDate.day,
+            sessInfo.serverDate.hour, sessInfo.serverDate.minute, sessInfo.serverDate.second);
+    PyDict_SetItemString(dict, "serverDate", Py_BuildValue("s", date));
     PyDict_SetItemString(dict, "serverType", Py_BuildValue("s", sessInfo.serverType));
     PyDict_SetItemString(dict, "serverVer", Py_BuildValue("I", sessInfo.serverVer));
     PyDict_SetItemString(dict, "serverRel", Py_BuildValue("I", sessInfo.serverRel));
@@ -169,7 +176,14 @@ static PyObject* dsmQuerySessInfo_wrapper(PyObject* self, PyObject * args) {
     PyDict_SetItemString(dict, "opNoTrace", Py_BuildValue("I", sessInfo.opNoTrace));
     PyDict_SetItemString(dict, "domainName", Py_BuildValue("s", sessInfo.domainName));
     PyDict_SetItemString(dict, "policySetName", Py_BuildValue("s", sessInfo.policySetName));
-    //PyDict_SetItemString(dict, "polActDate", Py_BuildValue("", sessInfo));
+    if (sessInfo.polActDate.year) {
+        sprintf(date, DATE_FORMAT,
+            sessInfo.polActDate.year, sessInfo.polActDate.month, sessInfo.polActDate.day,
+            sessInfo.polActDate.hour, sessInfo.polActDate.minute, sessInfo.polActDate.second);
+        PyDict_SetItemString(dict, "polActDate", Py_BuildValue("s", date));
+    } else {
+        PyDict_SetItemString(dict, "polActDate", Py_None);
+    }
     PyDict_SetItemString(dict, "dfltMCName", Py_BuildValue("s", sessInfo.dfltMCName));
     PyDict_SetItemString(dict, "gpBackRetn", Py_BuildValue("I", sessInfo.gpBackRetn));
     PyDict_SetItemString(dict, "gpArchRetn", Py_BuildValue("I", sessInfo));
@@ -184,6 +198,10 @@ static PyObject* dsmQuerySessInfo_wrapper(PyObject* self, PyObject * args) {
     PyDict_SetItemString(dict, "homeServerName", Py_BuildValue("s", sessInfo.homeServerName));
     PyDict_SetItemString(dict, "replServerHost", Py_BuildValue("s", sessInfo.replServerHost));
     PyDict_SetItemString(dict, "replServerPort", Py_BuildValue("I", sessInfo.replServerPort));
+
+    if (date)
+        free(date);
+
     return dict;
 }
 
