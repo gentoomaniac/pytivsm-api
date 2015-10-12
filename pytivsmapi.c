@@ -159,7 +159,7 @@ static void dsmSetUp_wrapper(PyObject * self, PyObject * args, PyObject * keywds
     }
 }
 
-static void dsmTerminate_wrapper(PyObject * self, PyObject * args, PyObject * keywds)
+static PyObject * dsmTerminate_wrapper(PyObject * self, PyObject * args, PyObject * keywds)
 {
     dsUint32_t dsmHandle;
     int rc;
@@ -168,15 +168,18 @@ static void dsmTerminate_wrapper(PyObject * self, PyObject * args, PyObject * ke
 
     // parse arguments
     if (!PyArg_ParseTupleAndKeywords(args, keywds, "K", kwlist, &dsmHandle)) {
-    return;
+        printf("argument parsing failed");
+    return NULL;
     }
 
     rc = dsmTerminate(dsmHandle);
 
     if(rc) {
         setError(rc);
-        return;
+        return NULL;
     }
+
+    return Py_True;
 }
 
 static PyMethodDef TIVsmAPIMethods[] = {

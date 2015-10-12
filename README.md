@@ -1,5 +1,14 @@
-# pytivsm-api
+ pytivsm-api
 Python wrapper for Tivoli Storage Manager API
+
+# setting up environment
+```
+#
+# TIVOLI STORAGE MANAGER (TSM) CONFIGURATION FILE LOCATIONS
+DSMI_DIR=/opt/tivoli/tsm/client/api/bin64
+DSMI_CONFIG=/opt/tivoli/tsm/client/api/bin64/dsm.sys
+DSMI_LOG=/tmp/dsmapi.log
+```
 
 # first example
 ```python
