@@ -1,66 +1,6 @@
-#include <Python.h>
-#include <stdio.h>
-#include <string.h>
+#include "wrapper.h"
 
-#include "dsmapitd.h"      /* Tivoli Storage Manager API type definitions                */
-#include "dsmapifp.h"      /* Tivoli Storage Manager API function prototypes.            */
-#include "dsmrc.h"         /* Tivoli Storage Manager API return codes.                   */
-
-#define ERR_MAX 100
-static const char DATE_FORMAT[] = "%i-%02i-%02i %02i:%02i:%02i";
-
-PyObject * TivsmAPIError = NULL;
-
-void setError(int rc) {
-    char errorMessage[ERR_MAX];
-    switch(rc){
-        case DSM_RC_ACCESS_DENIED:
-            sprintf(errorMessage, "API Error: DSM_RC_ACCESS_DENIED (%i)", rc);
-            break;
-
-        case DSM_RC_BAD_HOST_NAME:
-            sprintf(errorMessage, "API Error: DSM_RC_BAD_HOST_NAME (%i)", rc); break;
-
-        case DSM_RC_REJECT_NO_RESOURCES:
-            sprintf(errorMessage, "API Error: DSM_RC_REJECT_NO_RESOURCES (%i)", rc); break;
-
-        case DSM_RC_INVALID_OPT:
-            sprintf(errorMessage, "API Error: DSM_RC_INVALID_OPT (%i)", rc); break;
-        case DSM_RC_NO_HOST_ADDR:
-            sprintf(errorMessage, "API Error: DSM_RC_NO_HOST_ADDR (%i)", rc); break;
-        case DSM_RC_NO_OPT_FILE:
-            sprintf(errorMessage, "API Error: DSM_RC_NO_OPT_FILE (%i)", rc); break;
-        case DSM_RC_MACHINE_SAME:
-            sprintf(errorMessage, "API Error: DSM_RC_MACHINE_SAME (%i)", rc); break;
-        case DSM_RC_INVALID_SERVER:
-            sprintf(errorMessage, "API Error: DSM_RC_INVALID_SERVER (%i)", rc); break;
-        case DSM_RC_INVALID_KEYWORD:
-            sprintf(errorMessage, "API Error: DSM_RC_INVALID_KEYWORD (%i)", rc); break;
-        case DSM_RC_PATTERN_TOO_COMPLEX:
-            sprintf(errorMessage, "API Error: DSM_RC_PATTERN_TOO_COMPLEX (%i)", rc); break;
-        case DSM_RC_NO_CLOSING_BRACKET:
-            sprintf(errorMessage, "API Error: DSM_RC_NO_CLOSING_BRACKET (%i)", rc); break;
-        case DSM_RC_NLS_CANT_OPEN_TXT:
-            sprintf(errorMessage, "API Error: DSM_RC_NLS_CANT_OPEN_TXT (%i)", rc); break;
-        case DSM_RC_NLS_INVALID_CNTL_REC:
-            sprintf(errorMessage, "API Error: DSM_RC_NLS_INVALID_CNTL_REC (%i)", rc); break;
-        case DSM_RC_NOT_ADSM_AUTHORIZED:
-            sprintf(errorMessage, "API Error: DSM_RC_NOT_ADSM_AUTHORIZED (%i)", rc); break;
-        case DSM_RC_NO_INCLEXCL_FILE:
-            sprintf(errorMessage, "API Error: DSM_RC_NO_INCLEXCL_FILE (%i)", rc); break;
-        case DSM_RC_NO_SYS_OR_INCLEXCL:
-            sprintf(errorMessage, "API Error: DSM_RC_NO_SYS_OR_INCLEXCL (%i)", rc); break;
-
-        case DSM_RC_NO_NODE_REQD:
-            sprintf(errorMessage, "API Error: DSM_RC_NO_NODE_REQD (%i)", rc); break;
-        default:
-            sprintf(errorMessage, "API Error: %i", rc);
-    }
-
-    PyErr_SetString(TivsmAPIError, errorMessage);
-}
-
-static PyObject * dsmInit_wrapper(PyObject * self, PyObject * args, PyObject * keywds)
+PyObject * dsmInit_wrapper(PyObject * self, PyObject * args, PyObject * keywds)
 {
     dsUint32_t dsmHandle;
     dsmApiVersion dsmApiVersion;
@@ -97,7 +37,7 @@ static PyObject * dsmInit_wrapper(PyObject * self, PyObject * args, PyObject * k
 }
 
 // http://www-304.ibm.com/support/knowledgecenter/SSGSG7_7.1.0/com.ibm.itsm.client.develop.doc/r_cmd_dsmqueryapiversion.html
-static PyObject* dsmQueryApiVersion_wrapper(PyObject* self) {
+PyObject* dsmQueryApiVersion_wrapper(PyObject* self) {
     PyObject* dict = PyDict_New();
     dsmApiVersion apiVer;
 
@@ -112,7 +52,7 @@ static PyObject* dsmQueryApiVersion_wrapper(PyObject* self) {
 }
 
 // http://www-304.ibm.com/support/knowledgecenter/SSGSG7_7.1.0/com.ibm.itsm.client.develop.doc/r_cmd_dsmqueryapiversionex.html
-static PyObject* dsmQueryApiVersionEx_wrapper(PyObject* self) {
+PyObject* dsmQueryApiVersionEx_wrapper(PyObject* self) {
     PyObject* dict = PyDict_New();
     dsmApiVersionEx apiVerEx;
 
@@ -127,7 +67,7 @@ static PyObject* dsmQueryApiVersionEx_wrapper(PyObject* self) {
     return dict;
 }
 
-static PyObject* dsmQuerySessInfo_wrapper(PyObject* self, PyObject * args) {
+PyObject* dsmQuerySessInfo_wrapper(PyObject* self, PyObject * args) {
     PyObject* dict = PyDict_New();
     ApiSessInfo sessInfo;
     dsUint32_t dsmHandle;
@@ -205,8 +145,7 @@ static PyObject* dsmQuerySessInfo_wrapper(PyObject* self, PyObject * args) {
     return dict;
 }
 
-static PyObject* dsmQuerySessOptions_wrapper(PyObject* self, PyObject * args) {
-    PyObject* dict = PyDict_New();
+PyObject* dsmQuerySessOptions_wrapper(PyObject* self, PyObject * args) {
     dsUint32_t dsmHandle;
     optStruct optstruct;
     int rc;
@@ -222,21 +161,10 @@ static PyObject* dsmQuerySessOptions_wrapper(PyObject* self, PyObject * args) {
        return NULL;
     }
 
-    // TODO: implement remaining fields
-    PyDict_SetItemString(dict, "dsmDir", Py_BuildValue("s", optstruct.dsmiDir));
-    PyDict_SetItemString(dict, "dsmiConfig", Py_BuildValue("s", optstruct.dsmiConfig));
-    PyDict_SetItemString(dict, "serverName", Py_BuildValue("s", optstruct.serverName));
-    PyDict_SetItemString(dict, "commMethod", Py_BuildValue("I", optstruct.commMethod));
-    PyDict_SetItemString(dict, "serverAddresss", Py_BuildValue("s", optstruct.serverAddress));
-    PyDict_SetItemString(dict, "nodeName", Py_BuildValue("s", optstruct.nodeName));
-    PyDict_SetItemString(dict, "compression", optstruct.compression ? Py_True : Py_False);
-    PyDict_SetItemString(dict, "compressalways", optstruct.compressalways ? Py_True : Py_False);
-    PyDict_SetItemString(dict, "passwordAccess", optstruct.passwordAccess ? Py_True : Py_False);
-
-    return dict;
+    return optSTructToPyDict(optstruct);
 }
 
-static PyObject* dsmRCMsg_wrapper(PyObject * self, PyObject * args, PyObject * keywds) {
+PyObject* dsmRCMsg_wrapper(PyObject * self, PyObject * args, PyObject * keywds) {
     dsUint32_t dsmHandle;
     dsInt16_t dsmRC;
     char msg[DSM_MAX_RC_MSG_LENGTH];
@@ -259,7 +187,7 @@ static PyObject* dsmRCMsg_wrapper(PyObject * self, PyObject * args, PyObject * k
     return py_msg;
 }
 
-static void dsmSetUp_wrapper(PyObject * self, PyObject * args, PyObject * keywds)
+void dsmSetUp_wrapper(PyObject * self, PyObject * args, PyObject * keywds)
 {
     // TODO: parse envDict and pass it to dsmSetUp()
     /*
@@ -292,7 +220,7 @@ static void dsmSetUp_wrapper(PyObject * self, PyObject * args, PyObject * keywds
     }
 }
 
-static PyObject * dsmTerminate_wrapper(PyObject * self, PyObject * args)
+PyObject * dsmTerminate_wrapper(PyObject * self, PyObject * args)
 {
     dsUint32_t dsmHandle;
     int rc;
@@ -311,37 +239,3 @@ static PyObject * dsmTerminate_wrapper(PyObject * self, PyObject * args)
 
     return Py_True;
 }
-
-static PyMethodDef TIVsmAPIMethods[] = {
-     { "dsmInit", (PyCFunction)dsmInit_wrapper, METH_KEYWORDS, "Init TSM session" },
-     { "dsmQueryApiVersion", dsmQueryApiVersion_wrapper, METH_NOARGS, "Query TSM API version" },
-     { "dsmQueryApiVersionEx", dsmQueryApiVersionEx_wrapper, METH_NOARGS, "Query TSM API version" },
-     { "dsmQuerySessInfo", dsmQuerySessInfo_wrapper, METH_VARARGS, "Query TSM session info" },
-     { "dsmQuerySessOptions", dsmQuerySessOptions_wrapper, METH_VARARGS, "queries important option values that are valid in the specified session" },
-     { "dsmRCMsg", dsmRCMsg_wrapper, METH_VARARGS, "obtains the message text that is associated with an API return code" },
-     { "dsmSetUp", (PyCFunction)dsmSetUp_wrapper, METH_KEYWORDS, "Set up TSM environment" },
-     { "dsmTerminate", dsmTerminate_wrapper, METH_VARARGS, "Terminate TSM session" },
-      { NULL, NULL, 0, NULL }
-};
-
-static void defConstants(PyObject *m) {
-    PyModule_AddIntConstant (m, "DSM_RC_NO_OPT_FILE", DSM_RC_NO_OPT_FILE);
-}
-
-static void setupExceptions(PyObject *m) {
-    TivsmAPIError = PyErr_NewException("pytivsmapi.TivsmAPIError", NULL, NULL);
-    Py_INCREF(TivsmAPIError);
-    PyModule_AddObject(m, "TivsmAPIError", TivsmAPIError);
-}
-
-DL_EXPORT(void) initpytivsmapi(void)
-{
-    PyObject *m;
-    m = Py_InitModule("pytivsmapi", TIVsmAPIMethods);
-    if(m == NULL)
-        return;
-
-    defConstants(m);
-    setupExceptions(m);
-}
-
