@@ -11,6 +11,8 @@ DSMI_LOG=/tmp/dsmapi.log
 ## first example
 ```python
 >>> import pytivsmapi
+>>> pytivsmapi.dsmQueryCliOptions()
+{'commMethod': 1, 'serverAddresss': 'tsmserver.domain.net', 'nodeName': 'CLIENT_NODENAME', 'serverName': 'TSMSERVER.DOMAIN.NET', 'dsmDir': '/opt/tivoli/tsm/client/api/bin64', 'compressalways': True, 'passwordAccess': True, 'dsmiConfig': '/opt/tivoli/tsm/client/api/bin64/dsm.opt', 'compression': False}
 >>> sess = pytivsmapi.dsmInit(dsmApiVersion=pytivsmapi.dsmQueryApiVersion())
 >>> pytivsmapi.dsmQuerySessOptions(sess)
 {'commMethod': 1, 'serverAddresss': 'tsmserver.domain.net', 'nodeName': 'CLIENT_NODENAME', 'serverName': 'TSMSERVER.DOMAIN.NET', 'dsmDir': '/opt/tivoli/tsm/client/api/bin64', 'compressalways': True, 'passwordAccess': True, 'dsmiConfig': '/opt/tivoli/tsm/client/api/bin64/dsm.opt', 'compression': False}
@@ -27,6 +29,7 @@ True
 - dsmInit()
 - dsmQueryApiVersion()
 - dsmQueryApiVersionEx()
+- dsmQueryCliOptions()
 - dsmQuerySessInfo()
 - dsmQuerySessOptions()
 - dsmRCMsg()
