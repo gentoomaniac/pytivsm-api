@@ -6,13 +6,13 @@ PyObject* dsmChangePW_wrapper(PyObject * self, PyObject * args) {
     char* newPW = NULL;
     int rc;
 
-    if (!PyArg_ParseTuple(args, "Kss", &dsmHandle, &oldPW, &newPW)) {
+    if (!PyArg_ParseTuple(args, "Iss", &dsmHandle, &oldPW, &newPW)) {
         return NULL;
     }
 
     rc = dsmChangePW(dsmHandle, oldPW, newPW);
 
-    return Py_BuildValue("K", rc);
+    return Py_BuildValue("I", rc);
 }
 
 PyObject* dsmInit_wrapper(PyObject * self, PyObject * args, PyObject * keywds) {
@@ -42,12 +42,8 @@ PyObject* dsmInit_wrapper(PyObject * self, PyObject * args, PyObject * keywds) {
 
     rc = dsmInit(&dsmHandle, &dsmApiVersion, clientNodeName, clientOwnerName, clientPassword,
             applicationType, configfile, options);
-    if(rc) {
-        setError(rc);
-        return NULL;
-    }
 
-    return Py_BuildValue("K", dsmHandle);
+    return returnTouple(rc, Py_BuildValue("I", dsmHandle));
 }
 
 PyObject* dsmQueryApiVersion_wrapper(PyObject* self) {
@@ -74,12 +70,9 @@ PyObject* dsmQueryCliOptions_wrapper(PyObject* self) {
 
     memset(&optstruct,0x00,sizeof(optStruct));
 
-    if((rc = dsmQueryCliOptions(&optstruct)) != DSM_RC_OK) {
-       setError(rc);
-       return NULL;
-    }
+    rc = dsmQueryCliOptions(&optstruct);
 
-    return optStructToPyDict(optstruct);
+    return returnTouple(rc, optStructToPyDict(optstruct));
 }
 
 PyObject* dsmQuerySessInfo_wrapper(PyObject* self, PyObject * args) {
@@ -90,16 +83,13 @@ PyObject* dsmQuerySessInfo_wrapper(PyObject* self, PyObject * args) {
     memset(&sessInfo,0x00,sizeof(ApiSessInfo));
     sessInfo.stVersion = ApiSessInfoVersion;
 
-    if (!PyArg_ParseTuple(args, "K", &dsmHandle)) {
-    return NULL;
+    if (!PyArg_ParseTuple(args, "I", &dsmHandle)) {
+        return NULL;
     }
 
-    if((rc = dsmQuerySessInfo(dsmHandle, &sessInfo)) != DSM_RC_OK) {
-       setError(rc);
-       return NULL;
-    }
+    rc = dsmQuerySessInfo(dsmHandle, &sessInfo);
 
-    return apiSessInfoStructToPyDict(sessInfo);
+    return returnTouple(rc, apiSessInfoStructToPyDict(sessInfo));
 }
 
 PyObject* dsmQuerySessOptions_wrapper(PyObject* self, PyObject * args) {
@@ -109,16 +99,13 @@ PyObject* dsmQuerySessOptions_wrapper(PyObject* self, PyObject * args) {
 
     memset(&optstruct,0x00,sizeof(optStruct));
 
-    if (!PyArg_ParseTuple(args, "K", &dsmHandle)) {
+    if (!PyArg_ParseTuple(args, "I", &dsmHandle)) {
     return NULL;
     }
 
-    if((rc = dsmQuerySessOptions(dsmHandle, &optstruct)) != DSM_RC_OK) {
-       setError(rc);
-       return NULL;
-    }
+    rc = dsmQuerySessOptions(dsmHandle, &optstruct);
 
-    return optStructToPyDict(optstruct);
+    return returnTouple(rc, optStructToPyDict(optstruct));
 }
 
 PyObject* dsmRCMsg_wrapper(PyObject * self, PyObject * args, PyObject * keywds) {
@@ -127,24 +114,16 @@ PyObject* dsmRCMsg_wrapper(PyObject * self, PyObject * args, PyObject * keywds) 
     char msg[DSM_MAX_RC_MSG_LENGTH];
     int rc;
 
-    PyObject * py_msg = NULL;
-
-    if (!PyArg_ParseTuple(args, "KK", &dsmHandle, &dsmRC)) {
+    if (!PyArg_ParseTuple(args, "II", &dsmHandle, &dsmRC)) {
         return NULL;
     }
 
     rc = dsmRCMsg(dsmHandle, dsmRC, msg);
-    if(rc) {
-        setError(rc);
-        return NULL;
-    }
 
-    py_msg = Py_BuildValue("s", msg);
-
-    return py_msg;
+    return returnTouple(rc, Py_BuildValue("s", msg));
 }
 
-void dsmSetUp_wrapper(PyObject * self, PyObject * args, PyObject * keywds)
+PyObject* dsmSetUp_wrapper(PyObject * self, PyObject * args, PyObject * keywds)
 {
     // TODO: parse envDict and pass it to dsmSetUp()
     /*
@@ -166,15 +145,12 @@ void dsmSetUp_wrapper(PyObject * self, PyObject * args, PyObject * keywds)
 
     // parse arguments
     if (!PyArg_ParseTupleAndKeywords(args, keywds, "OO", kwlist, &mtFlag, &envDict)) {
-    return;
+        return NULL;
     }
 
     rc = dsmSetUp(PyObject_IsTrue(mtFlag), NULL);
 
-    if(rc) {
-        setError(rc);
-        return;
-    }
+    return Py_BuildValue("I", rc);
 }
 
 PyObject* dsmTerminate_wrapper(PyObject * self, PyObject * args)
@@ -183,16 +159,11 @@ PyObject* dsmTerminate_wrapper(PyObject * self, PyObject * args)
     int rc;
 
     // parse arguments
-    if (!PyArg_ParseTuple(args, "K", &dsmHandle)) {
-    return NULL;
+    if (!PyArg_ParseTuple(args, "I", &dsmHandle)) {
+        return NULL;
     }
 
     rc = dsmTerminate(dsmHandle);
 
-    if(rc) {
-        setError(rc);
-        return NULL;
-    }
-
-    return Py_True;
+    return Py_BuildValue("I", rc);
 }

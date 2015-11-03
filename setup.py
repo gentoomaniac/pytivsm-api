@@ -2,7 +2,7 @@ from distutils.core import setup, Extension
 
 # the c++ extension module
 extension_mod = Extension("pytivsmapi",
-        sources = ["main.c", "wrapper.c", "helper.c"],
+        sources = ["main.c", "wrapper.c", "generators.c", "helper.c"],
         include_dirs = ["/opt/tivoli/tsm/client/api/bin64/sample"],
         libraries = ["ApiTSM64"])
 
