@@ -53,3 +53,42 @@ DSMI_LOG=/tmp/dsmapi.log
 
 ## further reading
 https://www-01.ibm.com/support/knowledgecenter/SSGSG7_7.1.3/api/c_functioncalls.html
+
+## functions left to do
+dsmBeginGetData
+dsmBeginQuery
+dsmBeginTxn
+dsmBindMC
+dsmCleanUp
+dsmDeleteAccess
+dsmDeleteFS
+dsmDeleteObj
+dsmEndGetData
+dsmEndGetDataEx
+dsmEndGetObj
+dsmEndQuery
+dsmEndSendObj
+dsmEndSendObjEx
+dsmEndTxn
+dsmEndTxnEx
+dsmGetData
+dsmGetBufferData
+dsmGetNextQObj
+dsmGetObj
+dsmGroupHandler
+dsmInitEx
+dsmQueryAccess
+dsmQueryApiVersion
+dsmQueryApiVersionEx
+dsmRegisterFS
+dsmReleaseBuffer
+dsmRenameObj
+dsmRequestBuffer
+dsmRetentionEvent
+dsmSendBufferData
+dsmSendData
+dsmSendObj
+dsmSetAccess
+dsmUpdateFS
+dsmUpdateObj
+dsmUpdateObjEx

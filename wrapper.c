@@ -36,9 +36,7 @@ PyObject* dsmInit_wrapper(PyObject * self, PyObject * args, PyObject * keywds) {
         &clientPassword, &applicationType, &configfile, &options)) {
     return NULL;
     }
-    dsmApiVersion.version = PyInt_AsLong(PyDict_GetItemString(apiVersion, "version"));
-    dsmApiVersion.release = PyInt_AsLong(PyDict_GetItemString(apiVersion, "release"));
-    dsmApiVersion.level = PyInt_AsLong(PyDict_GetItemString(apiVersion, "level"));
+    pyDictToDsmApiVersion(apiVersion, &dsmApiVersion);
 
     rc = dsmInit(&dsmHandle, &dsmApiVersion, clientNodeName, clientOwnerName, clientPassword,
             applicationType, configfile, options);

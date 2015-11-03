@@ -1,5 +1,11 @@
 #include "generators.h"
 
+void pyDictToDsmApiVersion(PyObject* apiVersion, dsmApiVersion* dsmApiVersion) {
+    dsmApiVersion->version = PyInt_AsLong(PyDict_GetItemString(apiVersion, "version"));
+    dsmApiVersion->release = PyInt_AsLong(PyDict_GetItemString(apiVersion, "release"));
+    dsmApiVersion->level = PyInt_AsLong(PyDict_GetItemString(apiVersion, "level"));
+}
+
 PyObject* dsmApiVersionToPyDict(dsmApiVersion apiVer) {
     PyObject* dict = PyDict_New();
 
