@@ -1,5 +1,26 @@
 #include "helper.h"
 
+PyObject* dsmApiVersionToPyDict(dsmApiVersion apiVer) {
+    PyObject* dict = PyDict_New();
+
+    PyDict_SetItemString(dict, "version", Py_BuildValue("i", apiVer.version));
+    PyDict_SetItemString(dict, "release", Py_BuildValue("i", apiVer.release));
+    PyDict_SetItemString(dict, "level", Py_BuildValue("i", apiVer.level));
+
+    return dict;
+}
+
+PyObject* dsmApiVersionExToPyDict(dsmApiVersionEx apiVerEx) {
+    PyObject* dict = PyDict_New();
+
+    PyDict_SetItemString(dict, "version", Py_BuildValue("i", apiVerEx.version));
+    PyDict_SetItemString(dict, "release", Py_BuildValue("i", apiVerEx.release));
+    PyDict_SetItemString(dict, "level", Py_BuildValue("i", apiVerEx.level));
+    PyDict_SetItemString(dict, "sublevel", Py_BuildValue("i", apiVerEx.subLevel));
+
+    return dict;
+}
+
 PyObject* optStructToPyDict(optStruct optstruct) {
     PyObject* dict = PyDict_New();
 

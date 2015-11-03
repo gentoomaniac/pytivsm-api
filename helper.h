@@ -13,6 +13,9 @@
 
 void setError(int rc);
 
+PyObject* dsmApiVersionToPyDict(dsmApiVersion apiVer);
+PyObject* dsmApiVersionExToPyDict(dsmApiVersionEx apiVerEx);
+
 PyObject* optStructToPyDict(optStruct optstruct);
 PyObject* apiSessInfoStructToPyDict(ApiSessInfo sessInfo);
 

@@ -38,33 +38,22 @@ PyObject * dsmInit_wrapper(PyObject * self, PyObject * args, PyObject * keywds)
 
 // http://www-304.ibm.com/support/knowledgecenter/SSGSG7_7.1.0/com.ibm.itsm.client.develop.doc/r_cmd_dsmqueryapiversion.html
 PyObject* dsmQueryApiVersion_wrapper(PyObject* self) {
-    PyObject* dict = PyDict_New();
     dsmApiVersion apiVer;
 
     memset(&apiVer,0x00,sizeof(dsmApiVersion));
     dsmQueryApiVersion(&apiVer);
 
-    PyDict_SetItemString(dict, "version", Py_BuildValue("i", apiVer.version));
-    PyDict_SetItemString(dict, "release", Py_BuildValue("i", apiVer.release));
-    PyDict_SetItemString(dict, "level", Py_BuildValue("i", apiVer.level));
-
-    return dict;
+    return dsmApiVersionToPyDict(apiVer);
 }
 
 // http://www-304.ibm.com/support/knowledgecenter/SSGSG7_7.1.0/com.ibm.itsm.client.develop.doc/r_cmd_dsmqueryapiversionex.html
 PyObject* dsmQueryApiVersionEx_wrapper(PyObject* self) {
-    PyObject* dict = PyDict_New();
     dsmApiVersionEx apiVerEx;
 
     memset(&apiVerEx,0x00,sizeof(dsmApiVersionEx));
     dsmQueryApiVersionEx(&apiVerEx);
 
-    PyDict_SetItemString(dict, "version", Py_BuildValue("i", apiVerEx.version));
-    PyDict_SetItemString(dict, "release", Py_BuildValue("i", apiVerEx.release));
-    PyDict_SetItemString(dict, "level", Py_BuildValue("i", apiVerEx.level));
-    PyDict_SetItemString(dict, "sublevel", Py_BuildValue("i", apiVerEx.subLevel));
-
-    return dict;
+    return dsmApiVersionExToPyDict(apiVerEx);
 }
 
 PyObject* dsmQueryCliOptions_wrapper(PyObject* self) {
