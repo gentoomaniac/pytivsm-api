@@ -48,17 +48,48 @@ PyObject* dsmInit_wrapper(PyObject * self, PyObject * args, PyObject * keywds) {
 
 PyObject* dsmLogEvent_wrapper(PyObject * self, PyObject * args) {
     dsUint32_t dsmHandle;
-    static const dsmLogType logtype[] = {logServer, logLocal, logBoth};
     logInfo loginfo;
     int iLogType = 0;
     int rc;
 
+    memset(&loginfo,0x00,sizeof(loginfo));
+
     if (!PyArg_ParseTuple(args, "IIs", &dsmHandle, &iLogType, &loginfo.message)) {
         return NULL;
     }
-    loginfo.logType = logtype[iLogType];
+    loginfo.logType = (dsmLogType) iLogType;
 
     rc = dsmLogEvent(dsmHandle, &loginfo);
+
+    return Py_BuildValue("I", rc);
+}
+
+PyObject* dsmLogEventEx_wrapper(PyObject * self, PyObject * args) {
+    dsUint32_t dsmHandle;
+    dsmLogExIn_t dsmLogExIn;
+    dsmLogExOut_t dsmLogExOut;
+
+    int iLogSeverity = 0;
+    char* appMsgID = NULL;
+    int iLogType = 0;
+    int rc;
+
+    memset(&dsmLogExIn,0x00,sizeof(dsmLogExIn));
+    memset(&dsmLogExOut,0x00,sizeof(dsmLogExOut));
+
+    if (!PyArg_ParseTuple(args, "IIsIs", &dsmHandle, &iLogSeverity, &appMsgID,
+                &iLogType, &dsmLogExIn.message)) {
+        return NULL;
+    }
+
+    dsmLogExIn.stVersion = dsmLogExInVersion;
+    dsmLogExIn.severity = (dsmLogSeverity) iLogSeverity;
+    dsmLogExIn.logType = (dsmLogType) iLogType;
+    strncpy(dsmLogExIn.appMsgID, appMsgID, sizeof(dsmLogExIn.appMsgID));
+
+    dsmLogExOut.stVersion = dsmLogExOutVersion;
+
+    rc = dsmLogEventEx(dsmHandle, &dsmLogExIn, &dsmLogExOut);
 
     return Py_BuildValue("I", rc);
 }
