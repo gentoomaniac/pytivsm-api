@@ -205,6 +205,37 @@ static PyObject* dsmQuerySessInfo_wrapper(PyObject* self, PyObject * args) {
     return dict;
 }
 
+static PyObject* dsmQuerySessOptions_wrapper(PyObject* self, PyObject * args) {
+    PyObject* dict = PyDict_New();
+    dsUint32_t dsmHandle;
+    optStruct optstruct;
+    int rc;
+
+    memset(&optstruct,0x00,sizeof(optStruct));
+
+    if (!PyArg_ParseTuple(args, "K", &dsmHandle)) {
+    return NULL;
+    }
+
+    if((rc = dsmQuerySessOptions(dsmHandle, &optstruct)) != DSM_RC_OK) {
+       setError(rc);
+       return NULL;
+    }
+
+    // TODO: implement remaining fields
+    PyDict_SetItemString(dict, "dsmDir", Py_BuildValue("s", optstruct.dsmiDir));
+    PyDict_SetItemString(dict, "dsmiConfig", Py_BuildValue("s", optstruct.dsmiConfig));
+    PyDict_SetItemString(dict, "serverName", Py_BuildValue("s", optstruct.serverName));
+    PyDict_SetItemString(dict, "commMethod", Py_BuildValue("I", optstruct.commMethod));
+    PyDict_SetItemString(dict, "serverAddresss", Py_BuildValue("s", optstruct.serverAddress));
+    PyDict_SetItemString(dict, "nodeName", Py_BuildValue("s", optstruct.nodeName));
+    PyDict_SetItemString(dict, "compression", optstruct.compression ? Py_True : Py_False);
+    PyDict_SetItemString(dict, "compressalways", optstruct.compressalways ? Py_True : Py_False);
+    PyDict_SetItemString(dict, "passwordAccess", optstruct.passwordAccess ? Py_True : Py_False);
+
+    return dict;
+}
+
 static PyObject* dsmRCMsg_wrapper(PyObject * self, PyObject * args, PyObject * keywds) {
     dsUint32_t dsmHandle;
     dsInt16_t dsmRC;
@@ -286,6 +317,7 @@ static PyMethodDef TIVsmAPIMethods[] = {
      { "dsmQueryApiVersion", dsmQueryApiVersion_wrapper, METH_NOARGS, "Query TSM API version" },
      { "dsmQueryApiVersionEx", dsmQueryApiVersionEx_wrapper, METH_NOARGS, "Query TSM API version" },
      { "dsmQuerySessInfo", dsmQuerySessInfo_wrapper, METH_VARARGS, "Query TSM session info" },
+     { "dsmQuerySessOptions", dsmQuerySessOptions_wrapper, METH_VARARGS, "queries important option values that are valid in the specified session" },
      { "dsmRCMsg", dsmRCMsg_wrapper, METH_VARARGS, "obtains the message text that is associated with an API return code" },
      { "dsmSetUp", (PyCFunction)dsmSetUp_wrapper, METH_KEYWORDS, "Set up TSM environment" },
      { "dsmTerminate", dsmTerminate_wrapper, METH_VARARGS, "Terminate TSM session" },
