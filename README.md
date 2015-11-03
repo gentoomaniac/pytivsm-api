@@ -26,6 +26,7 @@ DSMI_LOG=/tmp/dsmapi.log
 (0, {'backDel': 2, 'maxObjPerTxn': 4096L, 'policySetName': 'STANDARD', 'opNoTrace': 0, 'replServerName': '', 'serverDate': '2015-11-03 05:22:53', 'hldelim': '/', 'serverPort': 1500, 'owner': 'marco', 'replServerHost': '', 'id': 'CLIENT_NODENAME', 'adsmServerName': '', 'compression': 3, 'archDel': 1, 'stVersion': 0, 'serverType': 'Linux/x86_64', 'gpArchRetn': 4266015752, 'serverVer': 7, 'homeServerName': '', 'confFile': '', 'dfltMCName': 'STANDARD', 'accessNode': '', 'nodeType': 'Linux x86-64', 'maxBytesPerTxn_64': 0L, 'serverHost': 'tsmserver.domain.net', 'replServerPort': 0, 'polActDate': None, 'maxBytesPerTxn': 26214400L, 'gpBackRetn': 30, 'fsdelim': '/', 'domainName': 'STANDARD', 'archiveRetentionProtection': False, 'lanFreeEnabled': False, 'serverRel': 1, 'serverSubLev': 300, 'serverLev': 1})
 
 >>> rc = pytivsmapi.dsmLogEvent(sess, 2, "Hello to both of you!! :)")
+>>> rc = pytivsmapi.dsmLogEventEx(sess, 3, "ABC12345678", 2, "I'm sent by dsmLogEventEx()")
 
 >>> rc = pytivsmapi.dsmChangePW(sess, "old", "new")
 >>> pytivsmapi.dsmRCMsg(sess, rc)[1]
@@ -40,6 +41,7 @@ DSMI_LOG=/tmp/dsmapi.log
 - dsmChangePW()
 - dsmInit()
 - dsmLogEvent()
+- dsmLogEventEx()
 - dsmQueryApiVersion()
 - dsmQueryApiVersionEx()
 - dsmQueryCliOptions()
