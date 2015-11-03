@@ -46,6 +46,23 @@ PyObject* dsmInit_wrapper(PyObject * self, PyObject * args, PyObject * keywds) {
     return returnTouple(rc, Py_BuildValue("I", dsmHandle));
 }
 
+PyObject* dsmLogEvent_wrapper(PyObject * self, PyObject * args) {
+    dsUint32_t dsmHandle;
+    static const dsmLogType logtype[] = {logServer, logLocal, logBoth};
+    logInfo loginfo;
+    int iLogType = 0;
+    int rc;
+
+    if (!PyArg_ParseTuple(args, "IIs", &dsmHandle, &iLogType, &loginfo.message)) {
+        return NULL;
+    }
+    loginfo.logType = logtype[iLogType];
+
+    rc = dsmLogEvent(dsmHandle, &loginfo);
+
+    return Py_BuildValue("I", rc);
+}
+
 PyObject* dsmQueryApiVersion_wrapper(PyObject* self) {
     dsmApiVersion apiVer;
 
