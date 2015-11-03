@@ -9,8 +9,11 @@
 #include "dsmrc.h"         /* Tivoli Storage Manager API return codes.                   */
 
 #define ERR_MAX 100
+#define DATE_FORMAT "%i-%02i-%02i %02i:%02i:%02i"
 
 void setError(int rc);
-PyObject* optSTructToPyDict(optStruct optstruct);
+
+PyObject* optStructToPyDict(optStruct optstruct);
+PyObject* apiSessInfoStructToPyDict(ApiSessInfo sessInfo);
 
 #endif

@@ -11,11 +11,10 @@
 
 #include "helper.h"
 
-#define DATE_FORMAT "%i-%02i-%02i %02i:%02i:%02i"
-
 PyObject* dsmInit_wrapper(PyObject * self, PyObject * args, PyObject * keywds);
 PyObject* dsmQueryApiVersion_wrapper(PyObject* self);
 PyObject* dsmQueryApiVersionEx_wrapper(PyObject* self);
+PyObject* dsmQueryCliOptions_wrapper(PyObject* self);
 PyObject* dsmQuerySessInfo_wrapper(PyObject* self, PyObject * args);
 PyObject* dsmQuerySessOptions_wrapper(PyObject* self, PyObject * args);
 PyObject* dsmRCMsg_wrapper(PyObject * self, PyObject * args, PyObject * keywds);
