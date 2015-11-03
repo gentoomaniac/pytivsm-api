@@ -205,6 +205,29 @@ static PyObject* dsmQuerySessInfo_wrapper(PyObject* self, PyObject * args) {
     return dict;
 }
 
+static PyObject* dsmRCMsg_wrapper(PyObject * self, PyObject * args, PyObject * keywds) {
+    dsUint32_t dsmHandle;
+    dsInt16_t dsmRC;
+    char msg[DSM_MAX_RC_MSG_LENGTH];
+    int rc;
+
+    PyObject * py_msg = NULL;
+
+    if (!PyArg_ParseTuple(args, "KK", &dsmHandle, &dsmRC)) {
+        return NULL;
+    }
+
+    rc = dsmRCMsg(dsmHandle, dsmRC, msg);
+    if(rc) {
+        setError(rc);
+        return NULL;
+    }
+
+    py_msg = Py_BuildValue("s", msg);
+
+    return py_msg;
+}
+
 static void dsmSetUp_wrapper(PyObject * self, PyObject * args, PyObject * keywds)
 {
     // TODO: parse envDict and pass it to dsmSetUp()
@@ -263,6 +286,7 @@ static PyMethodDef TIVsmAPIMethods[] = {
      { "dsmQueryApiVersion", dsmQueryApiVersion_wrapper, METH_NOARGS, "Query TSM API version" },
      { "dsmQueryApiVersionEx", dsmQueryApiVersionEx_wrapper, METH_NOARGS, "Query TSM API version" },
      { "dsmQuerySessInfo", dsmQuerySessInfo_wrapper, METH_VARARGS, "Query TSM session info" },
+     { "dsmRCMsg", dsmRCMsg_wrapper, METH_VARARGS, "obtains the message text that is associated with an API return code" },
      { "dsmSetUp", (PyCFunction)dsmSetUp_wrapper, METH_KEYWORDS, "Set up TSM environment" },
      { "dsmTerminate", dsmTerminate_wrapper, METH_VARARGS, "Terminate TSM session" },
       { NULL, NULL, 0, NULL }
