@@ -5,6 +5,7 @@
 //PyObject * TivsmAPIError = NULL;
 
 PyMethodDef TIVsmAPIMethods[] = {
+     { "dsmChangePW", dsmChangePW_wrapper, METH_VARARGS, "changes a Tivoli Storage Manager password" },
      { "dsmInit", (PyCFunction)dsmInit_wrapper, METH_KEYWORDS, "Init TSM session" },
      { "dsmQueryApiVersion", (PyCFunction)dsmQueryApiVersion_wrapper, METH_NOARGS, "Query TSM API version" },
      { "dsmQueryApiVersionEx", (PyCFunction)dsmQueryApiVersionEx_wrapper, METH_NOARGS, "Query TSM API version" },

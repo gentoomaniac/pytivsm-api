@@ -11,6 +11,7 @@
 
 #include "helper.h"
 
+PyObject* dsmChangePW_wrapper(PyObject * self, PyObject * args);
 PyObject* dsmInit_wrapper(PyObject * self, PyObject * args, PyObject * keywds);
 PyObject* dsmQueryApiVersion_wrapper(PyObject* self);
 PyObject* dsmQueryApiVersionEx_wrapper(PyObject* self);

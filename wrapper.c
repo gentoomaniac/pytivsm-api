@@ -1,7 +1,21 @@
 #include "wrapper.h"
 
-PyObject * dsmInit_wrapper(PyObject * self, PyObject * args, PyObject * keywds)
-{
+PyObject* dsmChangePW_wrapper(PyObject * self, PyObject * args) {
+    dsUint32_t dsmHandle;
+    char* oldPW = NULL;
+    char* newPW = NULL;
+    int rc;
+
+    if (!PyArg_ParseTuple(args, "Kss", &dsmHandle, &oldPW, &newPW)) {
+        return NULL;
+    }
+
+    rc = dsmChangePW(dsmHandle, oldPW, newPW);
+
+    return Py_BuildValue("K", rc);
+}
+
+PyObject* dsmInit_wrapper(PyObject * self, PyObject * args, PyObject * keywds) {
     dsUint32_t dsmHandle;
     dsmApiVersion dsmApiVersion;
     PyObject * apiVersion = NULL;
@@ -36,7 +50,6 @@ PyObject * dsmInit_wrapper(PyObject * self, PyObject * args, PyObject * keywds)
     return Py_BuildValue("K", dsmHandle);
 }
 
-// http://www-304.ibm.com/support/knowledgecenter/SSGSG7_7.1.0/com.ibm.itsm.client.develop.doc/r_cmd_dsmqueryapiversion.html
 PyObject* dsmQueryApiVersion_wrapper(PyObject* self) {
     dsmApiVersion apiVer;
 
@@ -46,7 +59,6 @@ PyObject* dsmQueryApiVersion_wrapper(PyObject* self) {
     return dsmApiVersionToPyDict(apiVer);
 }
 
-// http://www-304.ibm.com/support/knowledgecenter/SSGSG7_7.1.0/com.ibm.itsm.client.develop.doc/r_cmd_dsmqueryapiversionex.html
 PyObject* dsmQueryApiVersionEx_wrapper(PyObject* self) {
     dsmApiVersionEx apiVerEx;
 
@@ -165,7 +177,7 @@ void dsmSetUp_wrapper(PyObject * self, PyObject * args, PyObject * keywds)
     }
 }
 
-PyObject * dsmTerminate_wrapper(PyObject * self, PyObject * args)
+PyObject* dsmTerminate_wrapper(PyObject * self, PyObject * args)
 {
     dsUint32_t dsmHandle;
     int rc;
