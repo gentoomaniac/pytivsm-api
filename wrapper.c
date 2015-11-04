@@ -4,7 +4,7 @@ PyObject* dsmChangePW_wrapper(PyObject * self, PyObject * args) {
     dsUint32_t dsmHandle;
     char* oldPW = NULL;
     char* newPW = NULL;
-    int rc;
+    int rc = 0;
 
     if (!PyArg_ParseTuple(args, "Iss", &dsmHandle, &oldPW, &newPW)) {
         return NULL;
@@ -26,12 +26,11 @@ PyObject* dsmInit_wrapper(PyObject * self, PyObject * args, PyObject * keywds) {
     char* configfile = NULL;
     char* options = NULL;
 
-    int rc;
+    int rc = 0;
 
     static char *kwlist[] = {"dsmApiVersion", "clientNodeName", "clientOwnerName", "clientPassword",
         "applicationType", "configfile", "options"};
 
-    // parse arguments
     if (!PyArg_ParseTupleAndKeywords(args, keywds, "O|ssssss", kwlist, &apiVersion, &clientNodeName, &clientOwnerName,
         &clientPassword, &applicationType, &configfile, &options)) {
     return NULL;
@@ -44,11 +43,39 @@ PyObject* dsmInit_wrapper(PyObject * self, PyObject * args, PyObject * keywds) {
     return returnTouple(rc, Py_BuildValue("I", dsmHandle));
 }
 
+PyObject* dsmInitEx_wrapper(PyObject * self, PyObject * args) {
+    dsUint32_t dsmHandle;
+    dsmInitExIn_t initExIn;
+    dsmApiVersionEx apiVersion;
+    dsmAppVersion appVersion;
+    dsmInitExOut_t initExOut;
+    int rc = 0;
+    PyObject* pyInitExIn = NULL;
+    PyObject* pyInitExOut = NULL;
+
+    memset(&initExIn,0x00,sizeof(dsmInitExIn_t));
+    memset(&apiVersion,0x00,sizeof(dsmApiVersionEx));
+    memset(&appVersion,0x00,sizeof(dsmAppVersion));
+    memset(&initExOut,0x00,sizeof(dsmInitExOut_t));
+
+    if (!PyArg_ParseTuple(args, "OO", &pyInitExIn, &pyInitExOut)) {
+        return NULL;
+    }
+
+    initExIn.apiVersionExP = &apiVersion;
+    initExIn.appVersionP = &appVersion;
+    pyDictToDsmInitExInT(pyInitExIn, &initExIn);
+
+    // TODO: dsmInitExOut_t construction and actual calling of C function
+
+    return returnTouple(rc, Py_BuildValue("I", dsmHandle));
+}
+
 PyObject* dsmLogEvent_wrapper(PyObject * self, PyObject * args) {
     dsUint32_t dsmHandle;
     logInfo loginfo;
     int iLogType = 0;
-    int rc;
+    int rc = 0;
 
     memset(&loginfo,0x00,sizeof(loginfo));
 
@@ -70,7 +97,7 @@ PyObject* dsmLogEventEx_wrapper(PyObject * self, PyObject * args) {
     int iLogSeverity = 0;
     char* appMsgID = NULL;
     int iLogType = 0;
-    int rc;
+    int rc = 0;
 
     memset(&dsmLogExIn,0x00,sizeof(dsmLogExIn));
     memset(&dsmLogExOut,0x00,sizeof(dsmLogExOut));
@@ -112,7 +139,7 @@ PyObject* dsmQueryApiVersionEx_wrapper(PyObject* self) {
 
 PyObject* dsmQueryCliOptions_wrapper(PyObject* self) {
     optStruct optstruct;
-    int rc;
+    int rc = 0;
 
     memset(&optstruct,0x00,sizeof(optStruct));
 
@@ -124,7 +151,7 @@ PyObject* dsmQueryCliOptions_wrapper(PyObject* self) {
 PyObject* dsmQuerySessInfo_wrapper(PyObject* self, PyObject * args) {
     ApiSessInfo sessInfo;
     dsUint32_t dsmHandle;
-    int rc;
+    int rc = 0;
 
     memset(&sessInfo,0x00,sizeof(ApiSessInfo));
     sessInfo.stVersion = ApiSessInfoVersion;
@@ -141,7 +168,7 @@ PyObject* dsmQuerySessInfo_wrapper(PyObject* self, PyObject * args) {
 PyObject* dsmQuerySessOptions_wrapper(PyObject* self, PyObject * args) {
     dsUint32_t dsmHandle;
     optStruct optstruct;
-    int rc;
+    int rc = 0;
 
     memset(&optstruct,0x00,sizeof(optStruct));
 
@@ -158,7 +185,7 @@ PyObject* dsmRCMsg_wrapper(PyObject * self, PyObject * args, PyObject * keywds) 
     dsUint32_t dsmHandle;
     dsInt16_t dsmRC;
     char msg[DSM_MAX_RC_MSG_LENGTH];
-    int rc;
+    int rc = 0;
 
     if (!PyArg_ParseTuple(args, "II", &dsmHandle, &dsmRC)) {
         return NULL;
@@ -185,7 +212,7 @@ PyObject* dsmSetUp_wrapper(PyObject * self, PyObject * args, PyObject * keywds)
     */
     PyObject * mtFlag = NULL;
     PyObject * envDict = NULL;
-    int rc;
+    int rc = 0;
 
     static char *kwlist[] = {"mtFlag", "envSetup"};
 
@@ -202,7 +229,7 @@ PyObject* dsmSetUp_wrapper(PyObject * self, PyObject * args, PyObject * keywds)
 PyObject* dsmTerminate_wrapper(PyObject * self, PyObject * args)
 {
     dsUint32_t dsmHandle;
-    int rc;
+    int rc = 0;
 
     // parse arguments
     if (!PyArg_ParseTuple(args, "I", &dsmHandle)) {

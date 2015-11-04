@@ -40,6 +40,7 @@ DSMI_LOG=/tmp/dsmapi.log
 ## implemented functions
 - dsmChangePW()
 - dsmInit()
+- dsmInitEx() [wip]
 - dsmLogEvent()
 - dsmLogEventEx()
 - dsmQueryApiVersion()
@@ -76,7 +77,6 @@ dsmGetBufferData
 dsmGetNextQObj
 dsmGetObj
 dsmGroupHandler
-dsmInitEx
 dsmQueryAccess
 dsmQueryApiVersion
 dsmQueryApiVersionEx

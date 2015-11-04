@@ -1,10 +1,64 @@
 #include "generators.h"
 
+/*
+ * PyObject to C generators
+ *
+ * All functions below convert PyDicts into C structs
+ *
+ */
+
+void pyDictToDsmInitExInT(PyObject* dict, dsmInitExIn_t* dsmInitExInt) {
+    dsmInitExInt->stVersion = dsmInitExInVersion;
+    pyDictToDsmApiVersionEx(PyDict_GetItemString(dict, "dsmApiVersion"), dsmInitExInt->apiVersionExP);
+    dsmInitExInt->clientNodeNameP = PyString_AsString(PyDict_GetItemString(dict, "clientNodeName"));
+    dsmInitExInt->clientOwnerNameP = PyString_AsString(PyDict_GetItemString(dict, "clientOwnerName"));
+    dsmInitExInt->clientPasswordP = PyString_AsString(PyDict_GetItemString(dict, "clientPassword"));
+    dsmInitExInt->userNameP = PyString_AsString(PyDict_GetItemString(dict, "userName"));
+    dsmInitExInt->userPasswordP = PyString_AsString(PyDict_GetItemString(dict, "userPassword"));
+    dsmInitExInt->applicationTypeP = PyString_AsString(PyDict_GetItemString(dict, "applicationType"));
+    dsmInitExInt->configfile = PyString_AsString(PyDict_GetItemString(dict, "configfile"));
+    dsmInitExInt->options = PyString_AsString(PyDict_GetItemString(dict, "options"));
+    strncpy(&dsmInitExInt->dirDelimiter, PyString_AsString(PyDict_GetItemString(dict, "dirDelimiter")), sizeof(char));
+    dsmInitExInt->useUnicode = (PyDict_GetItemString(dict, "useUnicode") == Py_True) ? 1 : 0;
+    dsmInitExInt->bCrossPlatform = (PyDict_GetItemString(dict, "bCrossPlatform") == Py_True) ? 1 : 0;
+    dsmInitExInt->bService = (PyDict_GetItemString(dict, "bService") == Py_True) ? 1 : 0;
+    dsmInitExInt->bEncryptKeyEnabled = (PyDict_GetItemString(dict, "bEncryptKeyEnabled") == Py_True) ? 1 : 0;
+    dsmInitExInt->encryptionPasswordP = PyString_AsString(PyDict_GetItemString(dict, "encryptionPassword"));
+    dsmInitExInt->useTsmBuffers = (PyDict_GetItemString(dict, "useTsmBuffers") == Py_True) ? 1 : 0;
+    dsmInitExInt->numTsmBuffers = PyInt_AsLong(PyDict_GetItemString(dict, "numTsmBuffers"));
+    PyDictToDsmAppVersion(PyDict_GetItemString(dict, "dsmAppVersion"), dsmInitExInt->appVersionP);
+}
+
+void PyDictToDsmAppVersion(PyObject* dict, dsmAppVersion* app) {
+    app->stVersion = appVersionVer;
+    app->applicationVersion = PyInt_AsLong(PyDict_GetItemString(dict, "applicationVersion"));
+    app->applicationRelease = PyInt_AsLong(PyDict_GetItemString(dict, "applicationRelease"));
+    app->applicationLevel = PyInt_AsLong(PyDict_GetItemString(dict, "applicationLevel"));
+    app->applicationSubLevel = PyInt_AsLong(PyDict_GetItemString(dict, "applicationSubLevel"));
+}
+
 void pyDictToDsmApiVersion(PyObject* apiVersion, dsmApiVersion* dsmApiVersion) {
     dsmApiVersion->version = PyInt_AsLong(PyDict_GetItemString(apiVersion, "version"));
     dsmApiVersion->release = PyInt_AsLong(PyDict_GetItemString(apiVersion, "release"));
     dsmApiVersion->level = PyInt_AsLong(PyDict_GetItemString(apiVersion, "level"));
 }
+
+void pyDictToDsmApiVersionEx(PyObject* apiVersionEx, dsmApiVersionEx* dsmApiVersionEx) {
+    dsmApiVersionEx->stVersion = apiVersionExVer;
+    dsmApiVersionEx->version = PyInt_AsLong(PyDict_GetItemString(apiVersionEx, "version"));
+    dsmApiVersionEx->release = PyInt_AsLong(PyDict_GetItemString(apiVersionEx, "release"));
+    dsmApiVersionEx->level = PyInt_AsLong(PyDict_GetItemString(apiVersionEx, "level"));
+    dsmApiVersionEx->subLevel = PyInt_AsLong(PyDict_GetItemString(apiVersionEx, "subLevel"));
+    dsmApiVersionEx->unicode = (PyDict_GetItemString(apiVersionEx, "unicode") == Py_True) ? 1 : 0;
+}
+
+
+/*
+ * C to PyObject generators
+ *
+ * All functions below convert C structs into PyDicts
+ *
+ */
 
 PyObject* dsmApiVersionToPyDict(dsmApiVersion apiVer) {
     PyObject* dict = PyDict_New();
@@ -19,10 +73,12 @@ PyObject* dsmApiVersionToPyDict(dsmApiVersion apiVer) {
 PyObject* dsmApiVersionExToPyDict(dsmApiVersionEx apiVerEx) {
     PyObject* dict = PyDict_New();
 
+    PyDict_SetItemString(dict, "stVersion", Py_BuildValue("i", apiVerEx.stVersion));
     PyDict_SetItemString(dict, "version", Py_BuildValue("i", apiVerEx.version));
     PyDict_SetItemString(dict, "release", Py_BuildValue("i", apiVerEx.release));
     PyDict_SetItemString(dict, "level", Py_BuildValue("i", apiVerEx.level));
     PyDict_SetItemString(dict, "sublevel", Py_BuildValue("i", apiVerEx.subLevel));
+    PyDict_SetItemString(dict, "unicode", apiVerEx.unicode ? Py_True : Py_False);
 
     return dict;
 }
