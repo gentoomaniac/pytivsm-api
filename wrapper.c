@@ -1,5 +1,30 @@
 #include "wrapper.h"
 
+PyObject* dsmBeginQuery_wrapper(PyObject * self, PyObject * args) {
+    dsUint32_t dsmHandle;
+    dsmQueryType queryType;
+
+    int rc = 0;
+    int iqueryType = 0;
+    PyObject* qb = NULL;
+
+    if (!PyArg_ParseTuple(args, "IIO", &dsmHandle, &iqueryType, &qb)) {
+        return NULL;
+    }
+    queryType = (dsmQueryType) iqueryType;
+
+    if(queryType == qtFilespace) {
+        qryFSData queryBuffer;
+        memset(&queryBuffer,0x00,sizeof(qryFSData));
+        pyDictToQryFSData(qb, &queryBuffer);
+        rc = dsmBeginQuery(dsmHandle, queryType, (void*) &queryBuffer);
+    } else {
+        return NULL;
+    }
+
+    return Py_BuildValue("I", rc);
+}
+
 PyObject* dsmChangePW_wrapper(PyObject * self, PyObject * args) {
     dsUint32_t dsmHandle;
     char* oldPW = NULL;
@@ -9,9 +34,18 @@ PyObject* dsmChangePW_wrapper(PyObject * self, PyObject * args) {
     if (!PyArg_ParseTuple(args, "Iss", &dsmHandle, &oldPW, &newPW)) {
         return NULL;
     }
-
     rc = dsmChangePW(dsmHandle, oldPW, newPW);
+    return Py_BuildValue("I", rc);
+}
 
+PyObject* dsmEndQuery_wrapper(PyObject * self, PyObject * args) {
+    dsUint32_t dsmHandle;
+    int rc = 0;
+
+    if (!PyArg_ParseTuple(args, "I", &dsmHandle)) {
+        return NULL;
+    }
+    rc = dsmEndQuery(dsmHandle);
     return Py_BuildValue("I", rc);
 }
 
@@ -58,7 +92,7 @@ PyObject* dsmInitEx_wrapper(PyObject * self, PyObject * args) {
     memset(&appVersion,0x00,sizeof(dsmAppVersion));
     memset(&initExOut,0x00,sizeof(dsmInitExOut_t));
 
-    if (!PyArg_ParseTuple(args, "OO", &pyInitExIn, &pyInitExOut)) {
+    if (!PyArg_ParseTuple(args, "IOO", &dsmHandle, &pyInitExIn, &pyInitExOut)) {
         return NULL;
     }
 

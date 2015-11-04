@@ -7,6 +7,11 @@
  *
  */
 
+void pyDictToQryFSData(PyObject* dict, qryFSData* data) {
+    data->stVersion = qryFSDataVersion;
+    data->fsName = PyString_AsString(PyDict_GetItemString(dict, "fsName"));
+}
+
 void pyDictToUpdFSData(PyObject* dict, dsmFSUpd* updData) {
     updData->stVersion = dsmFSUpdVersion;
     updData->fsType = PyString_AsString(PyDict_GetItemString(dict, "fsType"));

@@ -11,6 +11,8 @@
 #define ERR_MAX 100
 #define DATE_FORMAT "%i-%02i-%02i %02i:%02i:%02i"
 
+void pyDictToQryFSData(PyObject* dict, qryFSData* data);
+
 void pyDictToFSAttr(PyObject* dict, dsmFSAttr* attrObj);
 void pyDictToNetwareFSAttr(PyObject* dict, dsmNetwareFSAttrib* attrObj);
 void pyDictToUnixFSAttr(PyObject* dict, dsmUnixFSAttrib* attrObj);
