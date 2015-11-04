@@ -28,6 +28,9 @@ DSMI_LOG=/tmp/dsmapi.log
 >>> rc = pytivsmapi.dsmLogEvent(sess, 2, "Hello to both of you!! :)")
 >>> rc = pytivsmapi.dsmLogEventEx(sess, 3, "ABC12345678", 2, "I'm sent by dsmLogEventEx()")
 
+>>> regFSData={'fsName':'/my_path/some/where','fsType':'some_type','occupancy':1024, 'capacity':4096, 'fsAttr':{'netwareFSAttr': {'fsInfoLength':9,'fsInfo':'rwxrwxrwx'}, 'unixFSAttr':{'fsInfoLength':9, 'fsInfo':'rwxrwxrwx'}, 'dosFSAttr':{'driveLetter':'', 'fsInfoLength':0, 'fsInfo':''}}}
+>>> rc = pytivsmapi.dsmRegisterFS(sess, regFSData)
+
 >>> rc = pytivsmapi.dsmChangePW(sess, "old", "new")
 >>> pytivsmapi.dsmRCMsg(sess, rc)[1]
 'ANS0264E (RC2300) Only a UNIX root user can execute dsmChangePW or dsmDeleteFS.'
@@ -49,6 +52,7 @@ DSMI_LOG=/tmp/dsmapi.log
 - dsmQuerySessInfo()
 - dsmQuerySessOptions()
 - dsmRCMsg()
+- dsmRegisterFS [review]
 - dsmSetUp() [wip]
 - dsmTerminate()
 
@@ -80,7 +84,6 @@ dsmGroupHandler
 dsmQueryAccess
 dsmQueryApiVersion
 dsmQueryApiVersionEx
-dsmRegisterFS
 dsmReleaseBuffer
 dsmRenameObj
 dsmRequestBuffer
