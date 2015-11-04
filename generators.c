@@ -7,6 +7,15 @@
  *
  */
 
+void pyDictToUpdFSData(PyObject* dict, dsmFSUpd* updData) {
+    updData->stVersion = dsmFSUpdVersion;
+    updData->fsType = PyString_AsString(PyDict_GetItemString(dict, "fsType"));
+    // ToDO: This doesn't propperly handle the hi/lo integers, but works around it
+    updData->occupancy.lo = PyInt_AsLong(PyDict_GetItemString(dict, "occupancy"));
+    updData->capacity.lo = PyInt_AsLong(PyDict_GetItemString(dict, "capacity"));
+    pyDictToFSAttr(PyDict_GetItemString(dict, "fsAttr"), &updData->fsAttr);
+}
+
 void pyDictToFSAttr(PyObject* dict, dsmFSAttr* attrObj) {
     pyDictToNetwareFSAttr(PyDict_GetItemString(dict, "netwareFSAttr"), &attrObj->netwareFSAttr);
     pyDictToUnixFSAttr(PyDict_GetItemString(dict, "unixFSAttr"), &attrObj->unixFSAttr);

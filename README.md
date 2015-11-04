@@ -31,6 +31,9 @@ DSMI_LOG=/tmp/dsmapi.log
 >>> regFSData={'fsName':'/my_path/some/where','fsType':'some_type','occupancy':1024, 'capacity':4096, 'fsAttr':{'netwareFSAttr': {'fsInfoLength':9,'fsInfo':'rwxrwxrwx'}, 'unixFSAttr':{'fsInfoLength':9, 'fsInfo':'rwxrwxrwx'}, 'dosFSAttr':{'driveLetter':'', 'fsInfoLength':0, 'fsInfo':''}}}
 >>> rc = pytivsmapi.dsmRegisterFS(sess, regFSData)
 
+updFSData={'fsType':'some_other_type','occupancy':1024, 'capacity':8192, 'fsAttr':{'netwareFSAttr': {'fsInfoLength':9,'fsInfo':'rwxrwxrwx'}, 'unixFSAttr':{'fsInfoLength':9, 'fsInfo':'rwxrwxrwx'}, 'dosFSAttr':{'driveLetter':'', 'fsInfoLength':0, 'fsInfo':''}}}
+>>> rc = pytivsmapi.dsmUpdateFS(sess, "/my_path/some/where", updFSData, 64)
+
 >>> rc = pytivsmapi.dsmChangePW(sess, "old", "new")
 >>> pytivsmapi.dsmRCMsg(sess, rc)[1]
 'ANS0264E (RC2300) Only a UNIX root user can execute dsmChangePW or dsmDeleteFS.'
@@ -55,6 +58,7 @@ DSMI_LOG=/tmp/dsmapi.log
 - dsmRegisterFS [review]
 - dsmSetUp() [wip]
 - dsmTerminate()
+- dsmUpdateFS() [review]
 
 ## further reading
 https://www-01.ibm.com/support/knowledgecenter/SSGSG7_7.1.3/api/c_functioncalls.html
@@ -92,6 +96,5 @@ dsmSendBufferData
 dsmSendData
 dsmSendObj
 dsmSetAccess
-dsmUpdateFS
 dsmUpdateObj
 dsmUpdateObjEx

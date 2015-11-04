@@ -19,6 +19,7 @@ PyMethodDef TIVsmAPIMethods[] = {
      { "dsmRegisterFS", (PyCFunction)dsmRegisterFS_wrapper, METH_VARARGS, "registers a new file space with the Tivoli Storage Manager server" },
      { "dsmSetUp", (PyCFunction)dsmSetUp_wrapper, METH_KEYWORDS, "Set up TSM environment" },
      { "dsmTerminate", dsmTerminate_wrapper, METH_VARARGS, "Terminate TSM session" },
+     { "dsmUpdateFS", (PyCFunction)dsmUpdateFS_wrapper, METH_VARARGS, "updates a file space in Tivoli Storage Manager storage" },
       { NULL, NULL, 0, NULL }
 };
 

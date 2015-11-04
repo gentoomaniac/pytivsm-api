@@ -265,3 +265,31 @@ PyObject* dsmTerminate_wrapper(PyObject * self, PyObject * args)
 
     return Py_BuildValue("I", rc);
 }
+
+PyObject* dsmUpdateFS_wrapper(PyObject * self, PyObject * args) {
+    dsUint32_t dsmHandle;
+    char* fsname = NULL;
+    dsmFSUpd updfsdata;
+    dsUint32_t fsUpdAct;
+    int rc = 0;
+    PyObject* fsUpdData = NULL;
+    /*
+     * Example dict:
+     * {'fsType':'some_type','occupancy':1024, 'capacity':4096, 'fsAttr':{
+     *      'netwareFSAttr': {'fsInfoLength':9,'fsInfo':'rwxrwxrwx'},
+     *      'unixFSAttr':{'fsInfoLength':9, 'fsInfo':'rwxrwxrwx'},
+     *      'dosFSAttr':{'driveLetter':'', 'fsInfoLength':0, 'fsInfo':''}}
+     * }
+    */
+    memset(&updfsdata,0x00,sizeof(dsmFSUpd));
+
+    if (!PyArg_ParseTuple(args, "IsOI", &dsmHandle, &fsname, &fsUpdData, &fsUpdAct)) {
+        return NULL;
+    }
+    pyDictToUpdFSData(fsUpdData, &updfsdata);
+
+    rc = dsmUpdateFS(dsmHandle, fsname, &updfsdata, fsUpdAct);
+
+    return Py_BuildValue("I", rc);
+}
+

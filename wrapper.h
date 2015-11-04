@@ -25,5 +25,6 @@ PyObject* dsmRCMsg_wrapper(PyObject * self, PyObject * args);
 PyObject* dsmRegisterFS_wrapper(PyObject * self, PyObject * args);
 PyObject* dsmSetUp_wrapper(PyObject * self, PyObject * args, PyObject * keywds);
 PyObject* dsmTerminate_wrapper(PyObject * self, PyObject * args);
+PyObject* dsmUpdateFS_wrapper(PyObject * self, PyObject * args);
 
 #endif

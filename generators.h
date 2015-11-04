@@ -15,7 +15,9 @@ void pyDictToFSAttr(PyObject* dict, dsmFSAttr* attrObj);
 void pyDictToNetwareFSAttr(PyObject* dict, dsmNetwareFSAttrib* attrObj);
 void pyDictToUnixFSAttr(PyObject* dict, dsmUnixFSAttrib* attrObj);
 void pyDictToDosFSAttr(PyObject* dict, dsmDosFSAttrib* attrObj);
+
 void pyDictToRegFSData(PyObject* dict, regFSData* fsData);
+void pyDictToUpdFSData(PyObject* dict, dsmFSUpd* updData);
 
 void pyDictToDsmInitExInT(PyObject* dict, dsmInitExIn_t* dsmInitExInt);
 void pyDictToDsmAppVersion(PyObject* dict, dsmAppVersion* app);
