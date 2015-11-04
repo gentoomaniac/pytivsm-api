@@ -16,6 +16,7 @@ PyMethodDef TIVsmAPIMethods[] = {
      { "dsmQuerySessInfo", dsmQuerySessInfo_wrapper, METH_VARARGS, "Query TSM session info" },
      { "dsmQuerySessOptions", dsmQuerySessOptions_wrapper, METH_VARARGS, "queries important option values that are valid in the specified session" },
      { "dsmRCMsg", (PyCFunction)dsmRCMsg_wrapper, METH_VARARGS, "obtains the message text that is associated with an API return code" },
+     { "dsmRegisterFS", (PyCFunction)dsmRegisterFS_wrapper, METH_VARARGS, "registers a new file space with the Tivoli Storage Manager server" },
      { "dsmSetUp", (PyCFunction)dsmSetUp_wrapper, METH_KEYWORDS, "Set up TSM environment" },
      { "dsmTerminate", dsmTerminate_wrapper, METH_VARARGS, "Terminate TSM session" },
       { NULL, NULL, 0, NULL }

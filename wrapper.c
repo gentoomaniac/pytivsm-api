@@ -181,7 +181,7 @@ PyObject* dsmQuerySessOptions_wrapper(PyObject* self, PyObject * args) {
     return returnTouple(rc, optStructToPyDict(optstruct));
 }
 
-PyObject* dsmRCMsg_wrapper(PyObject * self, PyObject * args, PyObject * keywds) {
+PyObject* dsmRCMsg_wrapper(PyObject * self, PyObject * args) {
     dsUint32_t dsmHandle;
     dsInt16_t dsmRC;
     char msg[DSM_MAX_RC_MSG_LENGTH];
@@ -194,6 +194,31 @@ PyObject* dsmRCMsg_wrapper(PyObject * self, PyObject * args, PyObject * keywds) 
     rc = dsmRCMsg(dsmHandle, dsmRC, msg);
 
     return returnTouple(rc, Py_BuildValue("s", msg));
+}
+
+PyObject* dsmRegisterFS_wrapper(PyObject * self, PyObject * args) {
+    dsUint32_t dsmHandle;
+    regFSData regfsdata;
+    int rc = 0;
+    PyObject* fsData = NULL;
+    /*
+     * Example dict:
+     * {'fsName':'/my/path','fsType':'some_type','occupancy':1024, 'capacity':4096, 'fsAttr':{
+     *      'netwareFSAttr': {'fsInfoLength':9,'fsInfo':'rwxrwxrwx'},
+     *      'unixFSAttr':{'fsInfoLength':9, 'fsInfo':'rwxrwxrwx'},
+     *      'dosFSAttr':{'driveLetter':'', 'fsInfoLength':0, 'fsInfo':''}}
+     * }
+    */
+    memset(&regfsdata,0x00,sizeof(regFSData));
+
+    if (!PyArg_ParseTuple(args, "IO", &dsmHandle, &fsData)) {
+        return NULL;
+    }
+    pyDictToRegFSData(fsData, &regfsdata);
+
+    rc = dsmRegisterFS(dsmHandle, &regfsdata);
+
+    return Py_BuildValue("I", rc);
 }
 
 PyObject* dsmSetUp_wrapper(PyObject * self, PyObject * args, PyObject * keywds)

@@ -11,8 +11,14 @@
 #define ERR_MAX 100
 #define DATE_FORMAT "%i-%02i-%02i %02i:%02i:%02i"
 
+void pyDictToFSAttr(PyObject* dict, dsmFSAttr* attrObj);
+void pyDictToNetwareFSAttr(PyObject* dict, dsmNetwareFSAttrib* attrObj);
+void pyDictToUnixFSAttr(PyObject* dict, dsmUnixFSAttrib* attrObj);
+void pyDictToDosFSAttr(PyObject* dict, dsmDosFSAttrib* attrObj);
+void pyDictToRegFSData(PyObject* dict, regFSData* fsData);
+
 void pyDictToDsmInitExInT(PyObject* dict, dsmInitExIn_t* dsmInitExInt);
-void PyDictToDsmAppVersion(PyObject* dict, dsmAppVersion* app);
+void pyDictToDsmAppVersion(PyObject* dict, dsmAppVersion* app);
 void pyDictToDsmApiVersion(PyObject* apiVersion, dsmApiVersion* dsmApiVersion);
 void pyDictToDsmApiVersionEx(PyObject* apiVersion, dsmApiVersionEx* dsmApiVersion);
 

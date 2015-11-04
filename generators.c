@@ -7,6 +7,34 @@
  *
  */
 
+void pyDictToFSAttr(PyObject* dict, dsmFSAttr* attrObj) {
+    pyDictToNetwareFSAttr(PyDict_GetItemString(dict, "netwareFSAttr"), &attrObj->netwareFSAttr);
+    pyDictToUnixFSAttr(PyDict_GetItemString(dict, "unixFSAttr"), &attrObj->unixFSAttr);
+    pyDictToDosFSAttr(PyDict_GetItemString(dict, "dosFSAttr"), &attrObj->dosFSAttr);
+}
+void pyDictToNetwareFSAttr(PyObject* dict, dsmNetwareFSAttrib* attrObj) {
+    attrObj->fsInfoLength = PyInt_AsLong(PyDict_GetItemString(dict, "fsInfoLength"));
+    strncpy(attrObj->fsInfo, PyString_AsString(PyDict_GetItemString(dict, "fsInfo")), DSM_MAX_FSINFO_LENGTH);
+}
+void pyDictToUnixFSAttr(PyObject* dict, dsmUnixFSAttrib* attrObj) {
+    attrObj->fsInfoLength = PyInt_AsLong(PyDict_GetItemString(dict, "fsInfoLength"));
+    strncpy(attrObj->fsInfo, PyString_AsString(PyDict_GetItemString(dict, "fsInfo")), DSM_MAX_FSINFO_LENGTH);
+}
+void pyDictToDosFSAttr(PyObject* dict, dsmDosFSAttrib* attrObj) {
+    strncpy(&attrObj->driveLetter, PyString_AsString(PyDict_GetItemString(dict, "driveLetter")), sizeof(char));
+    attrObj->fsInfoLength = PyInt_AsLong(PyDict_GetItemString(dict, "fsInfoLength"));
+    strncpy(attrObj->fsInfo, PyString_AsString(PyDict_GetItemString(dict, "fsInfo")), DSM_MAX_FSINFO_LENGTH);
+}
+void pyDictToRegFSData(PyObject* dict, regFSData* fsData) {
+    fsData->stVersion = regFSDataVersion;
+    fsData->fsName = PyString_AsString(PyDict_GetItemString(dict, "fsName"));
+    fsData->fsType = PyString_AsString(PyDict_GetItemString(dict, "fsType"));
+    // ToDO: This doesn't propperly handle the hi/lo integers, but works around it
+    fsData->occupancy.lo = PyInt_AsLong(PyDict_GetItemString(dict, "occupancy"));
+    fsData->capacity.lo = PyInt_AsLong(PyDict_GetItemString(dict, "capacity"));
+    pyDictToFSAttr(PyDict_GetItemString(dict, "fsAttr"), &fsData->fsAttr);
+}
+
 void pyDictToDsmInitExInT(PyObject* dict, dsmInitExIn_t* dsmInitExInt) {
     dsmInitExInt->stVersion = dsmInitExInVersion;
     pyDictToDsmApiVersionEx(PyDict_GetItemString(dict, "dsmApiVersion"), dsmInitExInt->apiVersionExP);
@@ -26,10 +54,10 @@ void pyDictToDsmInitExInT(PyObject* dict, dsmInitExIn_t* dsmInitExInt) {
     dsmInitExInt->encryptionPasswordP = PyString_AsString(PyDict_GetItemString(dict, "encryptionPassword"));
     dsmInitExInt->useTsmBuffers = (PyDict_GetItemString(dict, "useTsmBuffers") == Py_True) ? 1 : 0;
     dsmInitExInt->numTsmBuffers = PyInt_AsLong(PyDict_GetItemString(dict, "numTsmBuffers"));
-    PyDictToDsmAppVersion(PyDict_GetItemString(dict, "dsmAppVersion"), dsmInitExInt->appVersionP);
+    pyDictToDsmAppVersion(PyDict_GetItemString(dict, "dsmAppVersion"), dsmInitExInt->appVersionP);
 }
 
-void PyDictToDsmAppVersion(PyObject* dict, dsmAppVersion* app) {
+void pyDictToDsmAppVersion(PyObject* dict, dsmAppVersion* app) {
     app->stVersion = appVersionVer;
     app->applicationVersion = PyInt_AsLong(PyDict_GetItemString(dict, "applicationVersion"));
     app->applicationRelease = PyInt_AsLong(PyDict_GetItemString(dict, "applicationRelease"));

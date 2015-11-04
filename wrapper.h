@@ -21,7 +21,8 @@ PyObject* dsmQueryApiVersionEx_wrapper(PyObject* self);
 PyObject* dsmQueryCliOptions_wrapper(PyObject* self);
 PyObject* dsmQuerySessInfo_wrapper(PyObject* self, PyObject * args);
 PyObject* dsmQuerySessOptions_wrapper(PyObject* self, PyObject * args);
-PyObject* dsmRCMsg_wrapper(PyObject * self, PyObject * args, PyObject * keywds);
+PyObject* dsmRCMsg_wrapper(PyObject * self, PyObject * args);
+PyObject* dsmRegisterFS_wrapper(PyObject * self, PyObject * args);
 PyObject* dsmSetUp_wrapper(PyObject * self, PyObject * args, PyObject * keywds);
 PyObject* dsmTerminate_wrapper(PyObject * self, PyObject * args);
 
