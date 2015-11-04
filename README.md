@@ -34,6 +34,10 @@ DSMI_LOG=/tmp/dsmapi.log
 updFSData={'fsType':'some_other_type','occupancy':1024, 'capacity':8192, 'fsAttr':{'netwareFSAttr': {'fsInfoLength':9,'fsInfo':'rwxrwxrwx'}, 'unixFSAttr':{'fsInfoLength':9, 'fsInfo':'rwxrwxrwx'}, 'dosFSAttr':{'driveLetter':'', 'fsInfoLength':0, 'fsInfo':''}}}
 >>> rc = pytivsmapi.dsmUpdateFS(sess, "/my_path/some/where", updFSData, 64)
 
+>>> qryFSData = {'fsName': '/my_path/some/where'}
+>>> rc = pytivsmapi.dsmBeginQuery(sess, 3, qryFSData)
+>>> rc = pytivsmapi.dsmEndQuery(sess)
+
 >>> rc = pytivsmapi.dsmChangePW(sess, "old", "new")
 >>> pytivsmapi.dsmRCMsg(sess, rc)[1]
 'ANS0264E (RC2300) Only a UNIX root user can execute dsmChangePW or dsmDeleteFS.'
@@ -44,9 +48,11 @@ updFSData={'fsType':'some_other_type','occupancy':1024, 'capacity':8192, 'fsAttr
 ```
 
 ## implemented functions
+- dsmBeginQuery() [wip, qtFilespace only atm]
 - dsmChangePW()
 - dsmInit()
 - dsmInitEx() [wip]
+- dsmEndQuery()
 - dsmLogEvent()
 - dsmLogEventEx()
 - dsmQueryApiVersion()
