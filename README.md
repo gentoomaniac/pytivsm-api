@@ -10,7 +10,7 @@ DSMI_LOG=/tmp/dsmapi.log
 
 ## first example
 ```python
->>> from pytivsmapi import *
+>>> from tivsmapi import *
 >>> dsmQueryCliOptions()
 (0, {'commMethod': 1, 'serverAddresss': 'tsmserver.domain.net', 'nodeName': 'CLIENT_NODENAME', 'serverName': 'TSMSERVER.DOMAIN.NET', 'dsmDir': '/opt/tivoli/tsm/client/api/bin64', 'compressalways': True, 'passwordAccess': True, 'dsmiConfig': '/opt/tivoli/tsm/client/api/bin64/dsm.opt', 'compression': False})
 
@@ -36,6 +36,7 @@ updFSData={'fsType':'some_other_type','occupancy':1024, 'capacity':8192, 'fsAttr
 
 >>> qryFSData = {'fsName': '/my_path/some/where'}
 >>> rc = dsmBeginQuery(sess, 3, qryFSData)
+>>> (rc, res) = dsmGetNextQObj(sess, 3)
 >>> rc = dsmEndQuery(sess)
 
 >>> rc = dsmChangePW(sess, "old", "new")
@@ -50,6 +51,7 @@ updFSData={'fsType':'some_other_type','occupancy':1024, 'capacity':8192, 'fsAttr
 ## implemented functions
 - dsmBeginQuery() [wip, qtFilespace only atm]
 - dsmChangePW()
+- dsmGetNextQObj() [wip, qtFilespace partially]
 - dsmInit()
 - dsmInitEx() [wip]
 - dsmEndQuery()
@@ -88,7 +90,6 @@ dsmEndTxn
 dsmEndTxnEx
 dsmGetData
 dsmGetBufferData
-dsmGetNextQObj
 dsmGetObj
 dsmGroupHandler
 dsmQueryAccess
