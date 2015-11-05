@@ -38,6 +38,19 @@ PyObject* dsmChangePW_wrapper(PyObject * self, PyObject * args) {
     return Py_BuildValue("I", rc);
 }
 
+PyObject* dsmDeleteFS_wrapper(PyObject * self, PyObject * args) {
+    dsUint32_t dsmHandle;
+    char* fsName = NULL;
+    int repoType = 1;
+    int rc = 0;
+
+    if (!PyArg_ParseTuple(args, "IsI", &dsmHandle, &fsName, &repoType)) {
+        return NULL;
+    }
+    rc = dsmDeleteFS(dsmHandle, fsName, repoType);
+    return Py_BuildValue("I", rc);
+}
+
 PyObject* dsmEndQuery_wrapper(PyObject * self, PyObject * args) {
     dsUint32_t dsmHandle;
     int rc = 0;

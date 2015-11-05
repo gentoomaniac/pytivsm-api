@@ -34,6 +34,8 @@ DSMI_LOG=/tmp/dsmapi.log
 updFSData={'fsType':'some_other_type','occupancy':1024, 'capacity':8192, 'fsAttr':{'netwareFSAttr': {'fsInfoLength':9,'fsInfo':'rwxrwxrwx'}, 'unixFSAttr':{'fsInfoLength':9, 'fsInfo':'rwxrwxrwx'}, 'dosFSAttr':{'driveLetter':'', 'fsInfoLength':0, 'fsInfo':''}}}
 >>> rc = dsmUpdateFS(sess, "/my_path/some/where", updFSData, 64)
 
+>>> rc = dsmDeleteFS(sess, "/my_path/some/where", 1)
+
 >>> qryFSData = {'fsName': '/my_path/some/where'}
 >>> rc = dsmBeginQuery(sess, 3, qryFSData)
 >>> (rc, res) = dsmGetNextQObj(sess, 3)
@@ -52,6 +54,7 @@ updFSData={'fsType':'some_other_type','occupancy':1024, 'capacity':8192, 'fsAttr
 - dsmBeginQuery() [wip, qtFilespace only atm]
 - dsmChangePW()
 - dsmGetNextQObj() [wip, qtFilespace partially]
+- dsmDeleteFS()
 - dsmInit()
 - dsmInitEx() [wip]
 - dsmEndQuery()
@@ -73,12 +76,10 @@ https://www-01.ibm.com/support/knowledgecenter/SSGSG7_7.1.3/api/c_functioncalls.
 
 ## functions left to do
 dsmBeginGetData
-dsmBeginQuery
 dsmBeginTxn
 dsmBindMC
 dsmCleanUp
 dsmDeleteAccess
-dsmDeleteFS
 dsmDeleteObj
 dsmEndGetData
 dsmEndGetDataEx
