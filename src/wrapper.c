@@ -72,19 +72,12 @@ PyObject* dsmGetNextQObj_wrapper(PyObject * self, PyObject * args) {
         qData.bufferLen = sizeof(qryRespFSData);
         qData.bufferPtr = (char *) &respBuffer;
         respBuffer.stVersion = qryRespFSDataVersion;
-        printf("Prepared respBuffer\n");
-        printf("foo.\n");
-        printf("bar.\n");
         rc = dsmGetNextQObj(dsmHandle, (DataBlk*) &qData);
-        printf("Queried data: %i\n", rc);
-        printf("Parsing object.\n");
-        if(!rc)
-            qryRespFSDataToPyDict(respBuffer);
+        result = qryRespFSDataToPyDict(respBuffer);
     } else {
         return NULL;
     }
 
-    printf("Done\n");
     if(result != NULL)
         return returnTouple(rc, result);
     else

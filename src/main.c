@@ -26,21 +26,17 @@ PyMethodDef TIVsmAPIMethods[] = {
       { NULL, NULL, 0, NULL }
 };
 
-//    PyModule_AddIntConstant (m, "DSM_RC_NO_OPT_FILE", DSM_RC_NO_OPT_FILE);
-
 //static void setupExceptions(PyObject *m) {
 //    TivsmAPIError = PyErr_NewException("pytivsmapi.TivsmAPIError", NULL, NULL);
 //    Py_INCREF(TivsmAPIError);
 //    PyModule_AddObject(m, "TivsmAPIError", TivsmAPIError);
 //}
 
-DL_EXPORT(void) initpytivsmapi(void)
+DL_EXPORT(void) inittivsmapi(void)
 {
     PyObject *m;
-    m = Py_InitModule("pytivsmapi", TIVsmAPIMethods);
+    m = Py_InitModule("tivsmapi", TIVsmAPIMethods);
     if(m == NULL)
         return;
-
-//    setupExceptions(m);
 }
 

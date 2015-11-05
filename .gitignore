@@ -1,5 +1,3 @@
 env/
 build/
 *.o
-dsm.*
-test*
