@@ -8,6 +8,7 @@ PyMethodDef TIVsmAPIMethods[] = {
      { "dsmBeginQuery", dsmBeginQuery_wrapper, METH_VARARGS, "starts a query request to the server for information about data, file spaces, and management classes" },
      { "dsmChangePW", dsmChangePW_wrapper, METH_VARARGS, "changes a Tivoli Storage Manager password" },
      { "dsmEndQuery", dsmEndQuery_wrapper, METH_VARARGS, "signifies the end of a dsmBeginQuery action" },
+     { "dsmGetNextQObj", dsmGetNextQObj_wrapper, METH_VARARGS, "gets the next query response from a previous dsmBeginQuery call" },
      { "dsmInit", (PyCFunction)dsmInit_wrapper, METH_KEYWORDS, "Init TSM session" },
      { "dsmInitEx", (PyCFunction)dsmInit_wrapper, METH_VARARGS, "starts an API session by using the additional parameters for extended verification" },
      { "dsmLogEvent", dsmLogEvent_wrapper, METH_VARARGS, "logs a user message (ANE4991 I) to the server log file, to the local error log, or to both" },

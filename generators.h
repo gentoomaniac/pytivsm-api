@@ -26,6 +26,8 @@ void pyDictToDsmAppVersion(PyObject* dict, dsmAppVersion* app);
 void pyDictToDsmApiVersion(PyObject* apiVersion, dsmApiVersion* dsmApiVersion);
 void pyDictToDsmApiVersionEx(PyObject* apiVersion, dsmApiVersionEx* dsmApiVersion);
 
+PyObject* qryRespFSDataToPyDict(qryRespFSData respData);
+
 PyObject* dsmApiVersionToPyDict(dsmApiVersion apiVer);
 PyObject* dsmApiVersionExToPyDict(dsmApiVersionEx apiVerEx);
 

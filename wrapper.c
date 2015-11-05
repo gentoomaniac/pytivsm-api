@@ -49,6 +49,49 @@ PyObject* dsmEndQuery_wrapper(PyObject * self, PyObject * args) {
     return Py_BuildValue("I", rc);
 }
 
+PyObject* dsmGetNextQObj_wrapper(PyObject * self, PyObject * args) {
+    dsUint32_t dsmHandle;
+    dsmQueryType queryType;
+    int rc = 0;
+    int iqueryType = 0;
+    PyObject* result = NULL;
+    DataBlk qData;
+
+    qData.stVersion = DataBlkVersion;
+
+
+    if (!PyArg_ParseTuple(args, "II", &dsmHandle, &iqueryType)) {
+        return NULL;
+    }
+    queryType = (dsmQueryType) iqueryType;
+
+    if(queryType == qtFilespace) {
+        qryRespFSData respBuffer;
+        memset(&respBuffer,0x00,sizeof(qryRespFSData));
+
+        qData.bufferLen = sizeof(qryRespFSData);
+        qData.bufferPtr = (char *) &respBuffer;
+        respBuffer.stVersion = qryRespFSDataVersion;
+        printf("Prepared respBuffer\n");
+        printf("foo.\n");
+        printf("bar.\n");
+        rc = dsmGetNextQObj(dsmHandle, (DataBlk*) &qData);
+        printf("Queried data: %i\n", rc);
+        printf("Parsing object.\n");
+        if(!rc)
+            qryRespFSDataToPyDict(respBuffer);
+    } else {
+        return NULL;
+    }
+
+    printf("Done\n");
+    if(result != NULL)
+        return returnTouple(rc, result);
+    else
+        return returnTouple(rc, Py_None);
+}
+
+
 PyObject* dsmInit_wrapper(PyObject * self, PyObject * args, PyObject * keywds) {
     dsUint32_t dsmHandle;
     dsmApiVersion dsmApiVersion;

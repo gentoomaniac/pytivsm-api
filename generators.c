@@ -102,6 +102,17 @@ void pyDictToDsmApiVersionEx(PyObject* apiVersionEx, dsmApiVersionEx* dsmApiVers
  *
  */
 
+PyObject* qryRespFSDataToPyDict(qryRespFSData respData) {
+    PyObject* dict = PyDict_New();
+
+    PyDict_SetItemString(dict, "stVersion", Py_BuildValue("i", respData.stVersion));
+    PyDict_SetItemString(dict, "fsName", Py_BuildValue("s", respData.fsName));
+    PyDict_SetItemString(dict, "fsType", Py_BuildValue("s", respData.fsType));
+    // TODO
+
+    return dict;
+}
+
 PyObject* dsmApiVersionToPyDict(dsmApiVersion apiVer) {
     PyObject* dict = PyDict_New();
 

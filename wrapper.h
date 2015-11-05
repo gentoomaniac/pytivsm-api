@@ -15,6 +15,7 @@
 PyObject* dsmBeginQuery_wrapper(PyObject * self, PyObject * args);
 PyObject* dsmChangePW_wrapper(PyObject * self, PyObject * args);
 PyObject* dsmEndQuery_wrapper(PyObject * self, PyObject * args);
+PyObject* dsmGetNextQObj_wrapper(PyObject * self, PyObject * args);
 PyObject* dsmInit_wrapper(PyObject * self, PyObject * args, PyObject * keywds);
 PyObject* dsmLogEvent_wrapper(PyObject * self, PyObject * args);
 PyObject* dsmLogEventEx_wrapper(PyObject * self, PyObject * args);
