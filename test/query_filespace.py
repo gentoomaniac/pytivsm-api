@@ -21,11 +21,6 @@ LOG.info("dsmInit()")
 (rc, sess) = dsmInit(dsmApiVersion=dsmQueryApiVersion())
 LOG.debug(dsmRCMsg(sess, rc)[1])
 
-#LOG.info("dsmQuerySessInfo()")
-#(rc, sess_info) = dsmQuerySessInfo(sess)
-#LOG.debug(dsmRCMsg(sess, rc)[0])
-#jsonize(sess_info)
-
 if len(sys.argv) > 1:
     qryFSData = {'fsName': sys.argv[1]}
 else:
@@ -34,13 +29,13 @@ LOG.info("dsmBeginQuery(%i, %s)", sess, qryFSData)
 rc = dsmBeginQuery(sess, 3, qryFSData)
 LOG.debug(dsmRCMsg(sess, rc)[1])
 
-LOG.info("dsmGetNextQObj(%i, 3)", sess)
 while True:
+    LOG.info("dsmGetNextQObj(%i, 3)", sess)
     (rc, data) = dsmGetNextQObj(sess, 3)
-    LOG.debug(dsmRCMsg(sess, rc)[1])
+    LOG.debug( dsmRCMsg(sess, rc)[1])
     if rc != 2200:
         break
-    LOG.info(data)
+    LOG.info("result: %s", data)
 
 LOG.info("dsmEndQuery(%i)", sess)
 rc = dsmEndQuery(sess)
