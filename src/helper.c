@@ -1,7 +1,7 @@
 #include "helper.h"
 
 PyObject* dsmDateToPyString(const dsmDate date) {
-    char* dateString; // "2015-10-20 17:30:15"
+    char* dateString; // "2015-10-20T17:30:15"
     PyObject* pyString = NULL;
 
     dateString = malloc(sizeof(char)*strlen(DATE_FORMAT));

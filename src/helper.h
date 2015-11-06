@@ -9,7 +9,7 @@
 #include "dsmapifp.h"
 #include "dsmrc.h"
 
-#define DATE_FORMAT "%i-%02i-%02i %02i:%02i:%02i"
+#define DATE_FORMAT "%04i-%02i-%02iT%02i:%02i:%02i"
 PyObject* dsmDateToPyString(const dsmDate date);
 
 void pyIntToDsStruct64(unsigned long int cInt, dsStruct64_t* struct64);
