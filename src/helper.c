@@ -1,5 +1,9 @@
 #include "helper.h"
 
+void cStringToDsmDate(const char* dateString, dsmDate* date) {
+//    sscanf(dateString, DATE_FORMAT, (int*)&date->year, (int*)&date->month, (int*)&date->day, (int*)&date->hour, (int*)&date->minute, (int*)&date->second);
+}
+
 PyObject* dsmDateToPyString(const dsmDate date) {
     char* dateString; // "2015-10-20T17:30:15"
     PyObject* pyString = NULL;

@@ -10,6 +10,7 @@
 #include "dsmrc.h"
 
 #define DATE_FORMAT "%04i-%02i-%02iT%02i:%02i:%02i"
+void cStringToDsmDate(const char* dateString, dsmDate* date);
 PyObject* dsmDateToPyString(const dsmDate date);
 
 void pyIntToDsStruct64(unsigned long int cInt, dsStruct64_t* struct64);

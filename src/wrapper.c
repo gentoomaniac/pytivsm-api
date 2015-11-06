@@ -13,12 +13,31 @@ PyObject* dsmBeginQuery_wrapper(PyObject * self, PyObject * args) {
     }
     queryType = (dsmQueryType) iqueryType;
 
-    if(queryType == qtFilespace) {
+    if(queryType == qtBackup){
+        qryBackupData queryBuffer;
+        dsmObjName objName;
+        memset(&queryBuffer,0x00,sizeof(qryBackupData));
+        memset(&objName,0x00,sizeof(dsmObjName));
+        queryBuffer.objName = &objName;
+
+        pyDictToQryBackupData(qb, &queryBuffer);
+        rc = dsmBeginQuery(dsmHandle, queryType, (void*) &queryBuffer);
+    } else if(queryType == qtBackupActive){
+        qryABackupData queryBuffer;
+        dsmObjName objName;
+        memset(&queryBuffer,0x00,sizeof(qryABackupData));
+        memset(&objName,0x00,sizeof(dsmObjName));
+        queryBuffer.objName = &objName;
+
+        pyDictToQryABackupData(qb, &queryBuffer);
+        rc = dsmBeginQuery(dsmHandle, queryType, (void*) &queryBuffer);
+    } else if(queryType == qtFilespace) {
         qryFSData queryBuffer;
         memset(&queryBuffer,0x00,sizeof(qryFSData));
         pyDictToQryFSData(qb, &queryBuffer);
         rc = dsmBeginQuery(dsmHandle, queryType, (void*) &queryBuffer);
     } else {
+        PyErr_SetString(PyExc_TypeError, "Not implemented");
         return NULL;
     }
 
@@ -78,7 +97,25 @@ PyObject* dsmGetNextQObj_wrapper(PyObject * self, PyObject * args) {
     }
     queryType = (dsmQueryType) iqueryType;
 
-    if(queryType == qtFilespace) {
+    if(queryType == qtBackup){
+        qryRespBackupData respBuffer;
+        memset(&respBuffer,0x00,sizeof(qryRespBackupData));
+
+        qData.bufferLen = sizeof(qryRespBackupData);
+        qData.bufferPtr = (char *) &respBuffer;
+        respBuffer.stVersion = qryRespBackupDataVersion;
+        rc = dsmGetNextQObj(dsmHandle, (DataBlk*) &qData);
+        result = qryRespBackupDataToPyDict(respBuffer);
+    } else if(queryType == qtBackupActive){
+        qryARespBackupData respBuffer;
+        memset(&respBuffer,0x00,sizeof(qryARespBackupData));
+
+        qData.bufferLen = sizeof(qryARespBackupData);
+        qData.bufferPtr = (char *) &respBuffer;
+        respBuffer.stVersion = qryARespBackupDataVersion;
+        rc = dsmGetNextQObj(dsmHandle, (DataBlk*) &qData);
+        result = qryARespBackupDataToPyDict(respBuffer);
+    } else if(queryType == qtFilespace) {
         qryRespFSData respBuffer;
         memset(&respBuffer,0x00,sizeof(qryRespFSData));
 

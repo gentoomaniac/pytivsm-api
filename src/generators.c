@@ -7,6 +7,27 @@
  *
  */
 
+void pyDictToQryABackupData(PyObject* dict, qryABackupData* data) {
+    data->stVersion = qryABackupDataVersion;
+    pyDictToDsmObjName(PyDict_GetItemString(dict, "objName"), data->objName);
+}
+
+void pyDictToQryBackupData(PyObject* dict, qryBackupData* data) {
+    data->stVersion = qryBackupDataVersion;
+    pyDictToDsmObjName(PyDict_GetItemString(dict, "objName"), data->objName);
+    data->owner = PyString_AsString(PyDict_GetItemString(dict, "owner"));
+    data->objState = PyInt_AsLong(PyDict_GetItemString(dict, "objState"));
+    cStringToDsmDate(PyString_AsString(PyDict_GetItemString(dict, "pitDate")), &data->pitDate);
+}
+
+void pyDictToDsmObjName(PyObject* dict, dsmObjName* data) {
+    strncpy(data->fs, PyString_AsString(PyDict_GetItemString(dict, "fs")), DSM_MAX_FSNAME_LENGTH + 1);
+    strncpy(data->hl, PyString_AsString(PyDict_GetItemString(dict, "hl")), DSM_MAX_HL_LENGTH + 1);
+    strncpy(data->ll, PyString_AsString(PyDict_GetItemString(dict, "ll")), DSM_MAX_LL_LENGTH + 1);
+    data->objType = PyInt_AsLong(PyDict_GetItemString(dict, "objType"));
+
+}
+
 void pyDictToQryFSData(PyObject* dict, qryFSData* data) {
     data->stVersion = qryFSDataVersion;
     data->fsName = PyString_AsString(PyDict_GetItemString(dict, "fsName"));
@@ -99,6 +120,37 @@ void pyDictToDsmApiVersionEx(PyObject* apiVersionEx, dsmApiVersionEx* dsmApiVers
  * All functions below convert C structs into PyDicts
  *
  */
+
+PyObject* qryARespBackupDataToPyDict(const qryARespBackupData respData) {
+    PyObject* dict = PyDict_New();
+
+    PyDict_SetItemString(dict, "stVersion", Py_BuildValue("i", respData.stVersion));
+    PyDict_SetItemString(dict, "objName", dsmObjNameToPyDict(respData.objName));
+
+
+    return dict;
+}
+
+PyObject* qryRespBackupDataToPyDict(const qryRespBackupData respData) {
+    PyObject* dict = PyDict_New();
+
+    PyDict_SetItemString(dict, "stVersion", Py_BuildValue("i", respData.stVersion));
+    PyDict_SetItemString(dict, "objName", dsmObjNameToPyDict(respData.objName));
+
+
+    return dict;
+}
+
+PyObject* dsmObjNameToPyDict(const dsmObjName objName) {
+    PyObject* dict = PyDict_New();
+
+    PyDict_SetItemString(dict, "fs", Py_BuildValue("s", objName.fs));
+    PyDict_SetItemString(dict, "hl", Py_BuildValue("s", objName.hl));
+    PyDict_SetItemString(dict, "ll", Py_BuildValue("s", objName.ll));
+    PyDict_SetItemString(dict, "objType", Py_BuildValue("i", objName.objType));
+
+    return dict;
+}
 
 PyObject* qryRespFSDataToPyDict(const qryRespFSData respData) {
     PyObject* dict = PyDict_New();

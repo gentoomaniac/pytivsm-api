@@ -12,6 +12,10 @@
 
 #define ERR_MAX 100
 
+void pyDictToQryABackupData(PyObject* dict, qryABackupData* data);
+void pyDictToQryBackupData(PyObject* dict, qryBackupData* data);
+void pyDictToDsmObjName(PyObject* dict, dsmObjName* data);
+
 void pyDictToQryFSData(PyObject* dict, qryFSData* data);
 
 void pyDictToFSAttr(PyObject* dict, dsmFSAttr* attrObj);
@@ -26,6 +30,10 @@ void pyDictToDsmInitExInT(PyObject* dict, dsmInitExIn_t* dsmInitExInt);
 void pyDictToDsmAppVersion(PyObject* dict, dsmAppVersion* app);
 void pyDictToDsmApiVersion(PyObject* apiVersion, dsmApiVersion* dsmApiVersion);
 void pyDictToDsmApiVersionEx(PyObject* apiVersion, dsmApiVersionEx* dsmApiVersion);
+
+PyObject* qryARespBackupDataToPyDict(const qryARespBackupData respData);
+PyObject* qryRespBackupDataToPyDict(const qryRespBackupData respData);
+PyObject* dsmObjNameToPyDict(const dsmObjName objName);
 
 PyObject* qryRespFSDataToPyDict(const qryRespFSData respData);
 
