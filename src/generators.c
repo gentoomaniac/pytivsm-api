@@ -42,9 +42,8 @@ void pyDictToRegFSData(PyObject* dict, regFSData* fsData) {
     fsData->stVersion = regFSDataVersion;
     fsData->fsName = PyString_AsString(PyDict_GetItemString(dict, "fsName"));
     fsData->fsType = PyString_AsString(PyDict_GetItemString(dict, "fsType"));
-    // ToDO: This doesn't propperly handle the hi/lo integers, but works around it
-    fsData->occupancy.lo = PyInt_AsLong(PyDict_GetItemString(dict, "occupancy"));
-    fsData->capacity.lo = PyInt_AsLong(PyDict_GetItemString(dict, "capacity"));
+    pyIntToDsStruct64(PyInt_AsLong(PyDict_GetItemString(dict, "occupancy")), &fsData->occupancy);
+    pyIntToDsStruct64(PyInt_AsLong(PyDict_GetItemString(dict, "capacity")), &fsData->capacity);
     pyDictToFSAttr(PyDict_GetItemString(dict, "fsAttr"), &fsData->fsAttr);
 }
 

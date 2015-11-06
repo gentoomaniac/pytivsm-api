@@ -29,8 +29,8 @@ else:
 regFSData={
     'fsName':fsname,
     'fsType':'some_type',
-    'occupancy':1024,
-    'capacity':4096,
+    'occupancy':922337203685,
+    'capacity':9223372036854778,
     'fsAttr':{
         'netwareFSAttr': {
             'fsInfoLength':9,
