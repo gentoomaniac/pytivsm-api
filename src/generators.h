@@ -28,12 +28,17 @@ void pyDictToDsmAppVersion(PyObject* dict, dsmAppVersion* app);
 void pyDictToDsmApiVersion(PyObject* apiVersion, dsmApiVersion* dsmApiVersion);
 void pyDictToDsmApiVersionEx(PyObject* apiVersion, dsmApiVersionEx* dsmApiVersion);
 
-PyObject* qryRespFSDataToPyDict(qryRespFSData respData);
+PyObject* qryRespFSDataToPyDict(const qryRespFSData respData);
 
-PyObject* dsmApiVersionToPyDict(dsmApiVersion apiVer);
-PyObject* dsmApiVersionExToPyDict(dsmApiVersionEx apiVerEx);
+PyObject* dsmFSAttrToPyDict(const dsmFSAttr attr);
+PyObject* dosFSAttribToPyDict(const dsmDosFSAttrib attr);
+PyObject* unixFSAttribToPyDict(const dsmUnixFSAttrib attr);
+PyObject* netwareFSAttribToPyDict(const dsmNetwareFSAttrib attr);
 
-PyObject* optStructToPyDict(optStruct optstruct);
-PyObject* apiSessInfoStructToPyDict(ApiSessInfo sessInfo);
+PyObject* dsmApiVersionToPyDict(const dsmApiVersion apiVer);
+PyObject* dsmApiVersionExToPyDict(const dsmApiVersionEx apiVerEx);
+
+PyObject* optStructToPyDict(const optStruct optstruct);
+PyObject* apiSessInfoStructToPyDict(const ApiSessInfo sessInfo);
 
 #endif

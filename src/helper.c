@@ -13,7 +13,7 @@ PyObject* dsStruct64ToPyInt(const dsStruct64_t struct64) {
     cInt = cInt<<32;
     cInt = cInt|struct64.lo;
 
-    return Py_BuildValue("L", cInt);
+    return Py_BuildValue("K", cInt);
 }
 
 PyObject* returnTouple(int rc, PyObject* dataObj) {

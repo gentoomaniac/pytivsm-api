@@ -100,7 +100,7 @@ void pyDictToDsmApiVersionEx(PyObject* apiVersionEx, dsmApiVersionEx* dsmApiVers
  *
  */
 
-PyObject* qryRespFSDataToPyDict(qryRespFSData respData) {
+PyObject* qryRespFSDataToPyDict(const qryRespFSData respData) {
     PyObject* dict = PyDict_New();
 
     PyDict_SetItemString(dict, "stVersion", Py_BuildValue("i", respData.stVersion));
@@ -108,14 +108,52 @@ PyObject* qryRespFSDataToPyDict(qryRespFSData respData) {
     PyDict_SetItemString(dict, "fsType", Py_BuildValue("s", respData.fsType));
     PyDict_SetItemString(dict, "occupancy", dsStruct64ToPyInt(respData.occupancy));
     PyDict_SetItemString(dict, "capacity", dsStruct64ToPyInt(respData.capacity));
-
+    PyDict_SetItemString(dict, "fsAttr", dsmFSAttrToPyDict(respData.fsAttr));
     // TODO
     PyDict_SetItemString(dict, "failOverWriteDelay", Py_BuildValue("i", respData.failOverWriteDelay));
 
     return dict;
 }
 
-PyObject* dsmApiVersionToPyDict(dsmApiVersion apiVer) {
+PyObject* dsmFSAttrToPyDict(const dsmFSAttr attr) {
+    PyObject* dict = PyDict_New();
+
+    PyDict_SetItemString(dict, "netwareFSAttr", netwareFSAttribToPyDict(attr.netwareFSAttr));
+    PyDict_SetItemString(dict, "unixFSAttr", unixFSAttribToPyDict(attr.unixFSAttr));
+    PyDict_SetItemString(dict, "dosFSAttr", dosFSAttribToPyDict(attr.dosFSAttr));
+
+    return dict;
+}
+
+PyObject* dosFSAttribToPyDict(const dsmDosFSAttrib attr) {
+    PyObject* dict = PyDict_New();
+
+    PyDict_SetItemString(dict, "driveLetter", Py_BuildValue("c", attr.driveLetter));
+    PyDict_SetItemString(dict, "fsInfoLength", Py_BuildValue("I", attr.fsInfoLength));
+    PyDict_SetItemString(dict, "fsInfo", Py_BuildValue("s", attr.fsInfo));
+
+    return dict;
+}
+
+PyObject* unixFSAttribToPyDict(const dsmUnixFSAttrib attr) {
+    PyObject* dict = PyDict_New();
+
+    PyDict_SetItemString(dict, "fsInfoLength", Py_BuildValue("I", attr.fsInfoLength));
+    PyDict_SetItemString(dict, "fsInfo", Py_BuildValue("s", attr.fsInfo));
+
+    return dict;
+}
+
+PyObject* netwareFSAttribToPyDict(const dsmNetwareFSAttrib attr) {
+    PyObject* dict = PyDict_New();
+
+    PyDict_SetItemString(dict, "fsInfoLength", Py_BuildValue("I", attr.fsInfoLength));
+    PyDict_SetItemString(dict, "fsInfo", Py_BuildValue("s", attr.fsInfo));
+
+    return dict;
+}
+
+PyObject* dsmApiVersionToPyDict(const dsmApiVersion apiVer) {
     PyObject* dict = PyDict_New();
 
     PyDict_SetItemString(dict, "version", Py_BuildValue("i", apiVer.version));
@@ -125,7 +163,7 @@ PyObject* dsmApiVersionToPyDict(dsmApiVersion apiVer) {
     return dict;
 }
 
-PyObject* dsmApiVersionExToPyDict(dsmApiVersionEx apiVerEx) {
+PyObject* dsmApiVersionExToPyDict(const dsmApiVersionEx apiVerEx) {
     PyObject* dict = PyDict_New();
 
     PyDict_SetItemString(dict, "stVersion", Py_BuildValue("i", apiVerEx.stVersion));
@@ -138,7 +176,7 @@ PyObject* dsmApiVersionExToPyDict(dsmApiVersionEx apiVerEx) {
     return dict;
 }
 
-PyObject* optStructToPyDict(optStruct optstruct) {
+PyObject* optStructToPyDict(const optStruct optstruct) {
     PyObject* dict = PyDict_New();
 
     PyDict_SetItemString(dict, "dsmDir", Py_BuildValue("s", optstruct.dsmiDir));
@@ -154,7 +192,7 @@ PyObject* optStructToPyDict(optStruct optstruct) {
     return dict;
 }
 
-PyObject* apiSessInfoStructToPyDict(ApiSessInfo sessInfo) {
+PyObject* apiSessInfoStructToPyDict(const ApiSessInfo sessInfo) {
     PyObject* dict = PyDict_New();
     char * date; // "2015-10-20 17:30:15"
 
