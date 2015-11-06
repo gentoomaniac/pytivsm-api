@@ -53,22 +53,22 @@ LOG.debug(dsmRCMsg(sess, rc)[1])
 
 
 updFSData={
-    'fsType':'',
-    'occupancy':0,
-    'capacity':8192,            # field to update
+    'fsType': '',
+    'occupancy': 0,
+    'capacity': 9223372036854775800,            # field to update
     'fsAttr':{
         'netwareFSAttr': {
-            'fsInfoLength':0,
-            'fsInfo':''
+            'fsInfoLength': 0,
+            'fsInfo': ''
             },
         'unixFSAttr':{
-            'fsInfoLength':0,
-            'fsInfo':''
+            'fsInfoLength': 0,
+            'fsInfo': ''
             },
         'dosFSAttr':{
-            'driveLetter':'',
-            'fsInfoLength':0,
-            'fsInfo':''
+            'driveLetter': '',
+            'fsInfoLength': 0,
+            'fsInfo': ''
             }
         }
     }

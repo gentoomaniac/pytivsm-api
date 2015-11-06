@@ -15,9 +15,8 @@ void pyDictToQryFSData(PyObject* dict, qryFSData* data) {
 void pyDictToUpdFSData(PyObject* dict, dsmFSUpd* updData) {
     updData->stVersion = dsmFSUpdVersion;
     updData->fsType = PyString_AsString(PyDict_GetItemString(dict, "fsType"));
-    // ToDO: This doesn't propperly handle the hi/lo integers, but works around it
-    updData->occupancy.lo = PyInt_AsLong(PyDict_GetItemString(dict, "occupancy"));
-    updData->capacity.lo = PyInt_AsLong(PyDict_GetItemString(dict, "capacity"));
+    pyIntToDsStruct64(PyInt_AsLong(PyDict_GetItemString(dict, "occupancy")), &updData->occupancy);
+    pyIntToDsStruct64(PyInt_AsLong(PyDict_GetItemString(dict, "capacity")), &updData->capacity);
     pyDictToFSAttr(PyDict_GetItemString(dict, "fsAttr"), &updData->fsAttr);
 }
 
@@ -108,6 +107,9 @@ PyObject* qryRespFSDataToPyDict(qryRespFSData respData) {
     PyDict_SetItemString(dict, "stVersion", Py_BuildValue("i", respData.stVersion));
     PyDict_SetItemString(dict, "fsName", Py_BuildValue("s", respData.fsName));
     PyDict_SetItemString(dict, "fsType", Py_BuildValue("s", respData.fsType));
+    PyDict_SetItemString(dict, "occupancy", dsStruct64ToPyInt(respData.occupancy));
+    PyDict_SetItemString(dict, "capacity", dsStruct64ToPyInt(respData.capacity));
+
     // TODO
 
     return dict;

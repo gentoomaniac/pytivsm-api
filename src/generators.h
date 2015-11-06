@@ -8,6 +8,8 @@
 #include "dsmapifp.h"      /* Tivoli Storage Manager API function prototypes.            */
 #include "dsmrc.h"         /* Tivoli Storage Manager API return codes.                   */
 
+#include "helper.h"
+
 #define ERR_MAX 100
 #define DATE_FORMAT "%i-%02i-%02i %02i:%02i:%02i"
 
