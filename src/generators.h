@@ -11,7 +11,6 @@
 #include "helper.h"
 
 #define ERR_MAX 100
-#define DATE_FORMAT "%i-%02i-%02i %02i:%02i:%02i"
 
 void pyDictToQryFSData(PyObject* dict, qryFSData* data);
 

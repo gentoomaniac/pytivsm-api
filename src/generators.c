@@ -109,7 +109,17 @@ PyObject* qryRespFSDataToPyDict(const qryRespFSData respData) {
     PyDict_SetItemString(dict, "occupancy", dsStruct64ToPyInt(respData.occupancy));
     PyDict_SetItemString(dict, "capacity", dsStruct64ToPyInt(respData.capacity));
     PyDict_SetItemString(dict, "fsAttr", dsmFSAttrToPyDict(respData.fsAttr));
-    // TODO
+    PyDict_SetItemString(dict, "backStartDate", dsmDateToPyString(respData.backStartDate));
+    PyDict_SetItemString(dict, "backCompleteDate", dsmDateToPyString(respData.backCompleteDate));
+    PyDict_SetItemString(dict, "reserved1", dsmDateToPyString(respData.reserved1));
+    PyDict_SetItemString(dict, "lastReplStartDate", dsmDateToPyString(respData.lastReplStartDate));
+    PyDict_SetItemString(dict, "lastReplCmpltDate", dsmDateToPyString(respData.lastReplCmpltDate));
+    PyDict_SetItemString(dict, "lastBackOpDateFromServer", dsmDateToPyString(respData.lastBackOpDateFromServer));
+    PyDict_SetItemString(dict, "lastArchOpDateFromServer", dsmDateToPyString(respData.lastArchOpDateFromServer));
+    PyDict_SetItemString(dict, "lastSpMgOpDateFromServer", dsmDateToPyString(respData.lastSpMgOpDateFromServer));
+    PyDict_SetItemString(dict, "lastBackOpDateFromLocal", dsmDateToPyString(respData.lastBackOpDateFromLocal));
+    PyDict_SetItemString(dict, "lastArchOpDateFromLocal", dsmDateToPyString(respData.lastArchOpDateFromLocal));
+    PyDict_SetItemString(dict, "lastSpMgOpDateFromLocal", dsmDateToPyString(respData.lastSpMgOpDateFromLocal));
     PyDict_SetItemString(dict, "failOverWriteDelay", Py_BuildValue("i", respData.failOverWriteDelay));
 
     return dict;
@@ -194,19 +204,12 @@ PyObject* optStructToPyDict(const optStruct optstruct) {
 
 PyObject* apiSessInfoStructToPyDict(const ApiSessInfo sessInfo) {
     PyObject* dict = PyDict_New();
-    char * date; // "2015-10-20 17:30:15"
-
-    date = malloc(sizeof(char)*strlen(DATE_FORMAT));
-    if(!date)
-        return Py_None;
 
     // TODO: implement remaining fields
     PyDict_SetItemString(dict, "stVersion", Py_BuildValue("I", sessInfo.stVersion));
     PyDict_SetItemString(dict, "serverHost", Py_BuildValue("s", sessInfo.serverHost));
     PyDict_SetItemString(dict, "serverPort", Py_BuildValue("I", sessInfo.serverPort));
-    sprintf(date, DATE_FORMAT, sessInfo.serverDate.year, sessInfo.serverDate.month, sessInfo.serverDate.day,
-            sessInfo.serverDate.hour, sessInfo.serverDate.minute, sessInfo.serverDate.second);
-    PyDict_SetItemString(dict, "serverDate", Py_BuildValue("s", date));
+    PyDict_SetItemString(dict, "serverDate", dsmDateToPyString(sessInfo.serverDate));
     PyDict_SetItemString(dict, "serverType", Py_BuildValue("s", sessInfo.serverType));
     PyDict_SetItemString(dict, "serverVer", Py_BuildValue("I", sessInfo.serverVer));
     PyDict_SetItemString(dict, "serverRel", Py_BuildValue("I", sessInfo.serverRel));
@@ -227,10 +230,7 @@ PyObject* apiSessInfoStructToPyDict(const ApiSessInfo sessInfo) {
     PyDict_SetItemString(dict, "domainName", Py_BuildValue("s", sessInfo.domainName));
     PyDict_SetItemString(dict, "policySetName", Py_BuildValue("s", sessInfo.policySetName));
     if (sessInfo.polActDate.year) {
-        sprintf(date, DATE_FORMAT,
-            sessInfo.polActDate.year, sessInfo.polActDate.month, sessInfo.polActDate.day,
-            sessInfo.polActDate.hour, sessInfo.polActDate.minute, sessInfo.polActDate.second);
-        PyDict_SetItemString(dict, "polActDate", Py_BuildValue("s", date));
+        PyDict_SetItemString(dict, "serverDate", dsmDateToPyString(sessInfo.polActDate));
     } else {
         PyDict_SetItemString(dict, "polActDate", Py_None);
     }
@@ -248,9 +248,6 @@ PyObject* apiSessInfoStructToPyDict(const ApiSessInfo sessInfo) {
     PyDict_SetItemString(dict, "homeServerName", Py_BuildValue("s", sessInfo.homeServerName));
     PyDict_SetItemString(dict, "replServerHost", Py_BuildValue("s", sessInfo.replServerHost));
     PyDict_SetItemString(dict, "replServerPort", Py_BuildValue("I", sessInfo.replServerPort));
-
-    if (date)
-        free(date);
 
     return dict;
 }

@@ -1,5 +1,21 @@
 #include "helper.h"
 
+PyObject* dsmDateToPyString(const dsmDate date) {
+    char* dateString; // "2015-10-20 17:30:15"
+    PyObject* pyString = NULL;
+
+    dateString = malloc(sizeof(char)*strlen(DATE_FORMAT));
+    if(!dateString)
+        return Py_None;
+
+    sprintf(dateString, DATE_FORMAT, date.year, date.month, date.day, date.hour, date.minute, date.second);
+
+    pyString = Py_BuildValue("s", dateString);
+    free(dateString);
+
+    return pyString;
+}
+
 void pyIntToDsStruct64(unsigned long int cInt, dsStruct64_t* struct64) {
 
     struct64->lo = cInt;
