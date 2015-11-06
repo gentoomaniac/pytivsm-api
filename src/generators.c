@@ -110,6 +110,7 @@ PyObject* qryRespFSDataToPyDict(qryRespFSData respData) {
     PyDict_SetItemString(dict, "capacity", dsStruct64ToPyInt(respData.capacity));
 
     // TODO
+    PyDict_SetItemString(dict, "failOverWriteDelay", Py_BuildValue("i", respData.failOverWriteDelay));
 
     return dict;
 }
@@ -200,7 +201,7 @@ PyObject* apiSessInfoStructToPyDict(ApiSessInfo sessInfo) {
     PyDict_SetItemString(dict, "gpArchRetn", Py_BuildValue("I", sessInfo));
     PyDict_SetItemString(dict, "adsmServerName", Py_BuildValue("s", sessInfo.adsmServerName));
     PyDict_SetItemString(dict, "archiveRetentionProtection", sessInfo.archiveRetentionProtection ? Py_True : Py_False);
-    PyDict_SetItemString(dict, "maxBytesPerTxn_64", Py_BuildValue("K", sessInfo.maxBytesPerTxn_64));
+    PyDict_SetItemString(dict, "maxBytesPerTxn_64", dsStruct64ToPyInt(sessInfo.maxBytesPerTxn_64));
     PyDict_SetItemString(dict, "lanFreeEnabled", sessInfo.lanFreeEnabled ? Py_True : Py_False);
     //PyDict_SetItemString(dict, "dedupType", Py_BuildValue("", sessInfo));
     PyDict_SetItemString(dict, "accessNode", Py_BuildValue("s", sessInfo.accessNode));
