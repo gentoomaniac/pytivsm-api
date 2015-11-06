@@ -53,7 +53,7 @@ updFSData={'fsType':'some_other_type','occupancy':1024, 'capacity':8192, 'fsAttr
 ## implemented functions
 - dsmBeginQuery() [wip, qtFilespace only atm]
 - dsmChangePW()
-- dsmGetNextQObj() [wip, qtFilespace partially]
+- dsmGetNextQObj() [wip, qtFilespace only atm]
 - dsmDeleteFS()
 - dsmInit()
 - dsmInitEx() [wip]
