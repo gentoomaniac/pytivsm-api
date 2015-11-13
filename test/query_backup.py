@@ -37,17 +37,17 @@ qryBackupData = {
         'objState': 255,       # DSM_ANY_MATCH
         'pitDate': datetime.datetime.today().isoformat()
     }
-LOG.info("dsmBeginQuery(%i, 2, %s)", sess, qryBackupData)
-rc = dsmBeginQuery(sess, 2, qryBackupData)      # qtBackupActive
+LOG.info("dsmBeginQuery(%i, 1, %s)", sess, qryBackupData)
+rc = dsmBeginQuery(sess, 1, qryBackupData)      # qtBackupActive
 LOG.debug(dsmRCMsg(sess, rc)[1])
 
 while True:
-    LOG.info("dsmGetNextQObj(%i, 2)", sess)
+    LOG.info("dsmGetNextQObj(%i, 1)", sess)
     (rc, data) = dsmGetNextQObj(sess, 2)
     LOG.debug( dsmRCMsg(sess, rc)[1])
+    LOG.info("result: %s", data)
     if rc != 2200:
         break
-    LOG.info("result: %s", data)
 
 LOG.info("dsmEndQuery(%i)", sess)
 rc = dsmEndQuery(sess)
