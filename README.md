@@ -75,34 +75,34 @@ updFSData={'fsType':'some_other_type','occupancy':1024, 'capacity':8192, 'fsAttr
 https://www-01.ibm.com/support/knowledgecenter/SSGSG7_7.1.3/api/c_functioncalls.html
 
 ## functions left to do
-dsmBeginGetData
-dsmBeginTxn
-dsmBindMC
-dsmCleanUp
-dsmDeleteAccess
-dsmDeleteObj
-dsmEndGetData
-dsmEndGetDataEx
-dsmEndGetObj
-dsmEndQuery
-dsmEndSendObj
-dsmEndSendObjEx
-dsmEndTxn
-dsmEndTxnEx
-dsmGetData
-dsmGetBufferData
-dsmGetObj
-dsmGroupHandler
-dsmQueryAccess
-dsmQueryApiVersion
-dsmQueryApiVersionEx
-dsmReleaseBuffer
-dsmRenameObj
-dsmRequestBuffer
-dsmRetentionEvent
-dsmSendBufferData
-dsmSendData
-dsmSendObj
-dsmSetAccess
-dsmUpdateObj
-dsmUpdateObjEx
+- dsmBeginGetData
+- dsmBeginTxn
+- dsmBindMC
+- dsmCleanUp
+- dsmDeleteAccess
+- dsmDeleteObj
+- dsmEndGetData
+- dsmEndGetDataEx
+- dsmEndGetObj
+- dsmEndQuery
+- dsmEndSendObj
+- dsmEndSendObjEx
+- dsmEndTxn
+- dsmEndTxnEx
+- dsmGetData
+- dsmGetBufferData
+- dsmGetObj
+- dsmGroupHandler
+- dsmQueryAccess
+- dsmQueryApiVersion
+- dsmQueryApiVersionEx
+- dsmReleaseBuffer
+- dsmRenameObj
+- dsmRequestBuffer
+- dsmRetentionEvent
+- dsmSendBufferData
+- dsmSendData
+- dsmSendObj
+- dsmSetAccess
+- dsmUpdateObj
+- dsmUpdateObjEx
