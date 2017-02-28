@@ -1,3 +1,5 @@
 env/
 build/
+.kdev4/
 *.o
+*.kdev4

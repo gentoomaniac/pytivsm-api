@@ -1,5 +1,6 @@
 #include <Python.h>
 
+#include "constants.h"
 #include "wrapper.h"
 
 //PyObject * TivsmAPIError = NULL;
@@ -39,5 +40,7 @@ DL_EXPORT(void) inittivsmapi(void)
     m = Py_InitModule("tivsmapi", TIVsmAPIMethods);
     if(m == NULL)
         return;
+    
+    registerConstants(m);
 }
 
