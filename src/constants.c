@@ -239,6 +239,67 @@ void registerConstants(PyObject *m){
     /* future use */
     PyModule_AddIntConstant(m, "MEDIA_UNAVAILABLE", MEDIA_UNAVAILABLE);
     
+    /*-------------------------------------------------------------------------+
+    | data structure versions                                                  |
+    +-------------------------------------------------------------------------*/
+    PyModule_AddIntConstant(m, "PartialObjDataVersion", PartialObjDataVersion); /*                                       */
+    PyModule_AddIntConstant(m, "apiVersionExVer", apiVersionExVer);
+    PyModule_AddIntConstant(m, "appVersionVer", appVersionVer);
+    PyModule_AddIntConstant(m, "delBackVersion", delBackVersion);
+    PyModule_AddIntConstant(m, "delArchVersion", delArchVersion);
+    PyModule_AddIntConstant(m, "delBackIDVersion", delBackIDVersion);
+    PyModule_AddIntConstant(m, "ObjAttrVersion", ObjAttrVersion);
+    PyModule_AddIntConstant(m, "mcBindKeyVersion", mcBindKeyVersion);
+    PyModule_AddIntConstant(m, "dsmGetListVersion", dsmGetListVersion);         /* default if not using Partial Obj data */
+    PyModule_AddIntConstant(m, "dsmGetListPORVersion", dsmGetListPORVersion);   /* version if using Partial Obj data     */
+    PyModule_AddIntConstant(m, "DataBlkVersion", DataBlkVersion);
+    PyModule_AddIntConstant(m, "qryMCDataVersion", qryMCDataVersion);
+    PyModule_AddIntConstant(m, "qryRespMCDetailDataVersion", qryRespMCDetailDataVersion);
+    PyModule_AddIntConstant(m, "qryRespMCDataVersion", qryRespMCDataVersion);
+    PyModule_AddIntConstant(m, "qryArchiveDataVersion", qryArchiveDataVersion);
+    PyModule_AddIntConstant(m, "qryRespArchiveDataVersion", qryRespArchiveDataVersion);
+    PyModule_AddIntConstant(m, "sndArchiveDataVersion", sndArchiveDataVersion);
+    PyModule_AddIntConstant(m, "qryBackupDataVersion", qryBackupDataVersion);
+    PyModule_AddIntConstant(m, "qryRespBackupDataVersion", qryRespBackupDataVersion);
+    PyModule_AddIntConstant(m, "qryABackupDataVersion", qryABackupDataVersion);
+    PyModule_AddIntConstant(m, "qryARespBackupDataVersion", qryARespBackupDataVersion);
+    PyModule_AddIntConstant(m, "qryBackupGroupsVersion", qryBackupGroupsVersion);
+    PyModule_AddIntConstant(m, "qryProxyNodeDataVersion",qryProxyNodeDataVersion);
+    PyModule_AddIntConstant(m, "qryRespProxyNodeDataVersion", qryRespProxyNodeDataVersion);
+    PyModule_AddIntConstant(m, "dsmFSUpdVersion", dsmFSUpdVersion);
+    PyModule_AddIntConstant(m, "qryFSDataVersion", qryFSDataVersion);
+    PyModule_AddIntConstant(m, "qryRespFSDataVersion", qryRespFSDataVersion);
+    PyModule_AddIntConstant(m, "regFSDataVersion", regFSDataVersion);
+    PyModule_AddIntConstant(m, "ApiSessInfoVersion", ApiSessInfoVersion);
+    PyModule_AddIntConstant(m, "qryRespAccessDataVersion", qryRespAccessDataVersion);
+    PyModule_AddIntConstant(m, "envSetUpVersion", envSetUpVersion);
+    PyModule_AddIntConstant(m, "dsmInitExInVersion", dsmInitExInVersion);
+    PyModule_AddIntConstant(m, "dsmInitExOutVersion", dsmInitExOutVersion);
+    PyModule_AddIntConstant(m, "dsmLogExInVersion", dsmLogExInVersion);
+    PyModule_AddIntConstant(m, "dsmLogExOutVersion", dsmLogExOutVersion);
+    PyModule_AddIntConstant(m, "dsmRenameInVersion", dsmRenameInVersion);
+    PyModule_AddIntConstant(m, "dsmRenameOutVersion", dsmRenameOutVersion);
+    PyModule_AddIntConstant(m, "dsmEndSendObjExInVersion", dsmEndSendObjExInVersion);
+    PyModule_AddIntConstant(m, "dsmEndSendObjExOutVersion", dsmEndSendObjExOutVersion);
+    PyModule_AddIntConstant(m, "dsmGroupHandlerInVersion", dsmGroupHandlerInVersion);
+    PyModule_AddIntConstant(m, "dsmGroupHandlerOutVersion", dsmGroupHandlerOutVersion);
+    PyModule_AddIntConstant(m, "dsmEndTxnExInVersion", dsmEndTxnExInVersion);
+    PyModule_AddIntConstant(m, "dsmEndTxnExOutVersion", dsmEndTxnExOutVersion);
+    PyModule_AddIntConstant(m, "dsmEndGetDataExInVersion", dsmEndGetDataExInVersion);
+    PyModule_AddIntConstant(m, "dsmEndGetDataExOutVersion", dsmEndGetDataExOutVersion);
+    PyModule_AddIntConstant(m, "dsmObjlistVersion", dsmObjlistVersion);
+    PyModule_AddIntConstant(m, "dsmRetentionEventInVersion", dsmRetentionEventInVersion);
+    PyModule_AddIntConstant(m, "dsmRetentionEventOutVersion", dsmRetentionEventOutVersion);
+    PyModule_AddIntConstant(m, "requestBufferInVersion", requestBufferInVersion);
+    PyModule_AddIntConstant(m, "requestBufferOutVersion", requestBufferOutVersion);
+    PyModule_AddIntConstant(m, "releaseBufferInVersion", releaseBufferInVersion);
+    PyModule_AddIntConstant(m, "releaseBufferOutVersion", releaseBufferOutVersion);
+    PyModule_AddIntConstant(m, "getBufferDataInVersion", getBufferDataInVersion);
+    PyModule_AddIntConstant(m, "getBufferDataOutVersion", getBufferDataOutVersion);
+    PyModule_AddIntConstant(m, "sendBufferDataInVersion", sendBufferDataInVersion);
+    PyModule_AddIntConstant(m, "sendBufferDataOutVersion", sendBufferDataOutVersion);
+    PyModule_AddIntConstant(m, "dsmUpdateObjExInVersion", dsmUpdateObjExInVersion);
+    PyModule_AddIntConstant(m, "dsmUpdateObjExOutVersion", dsmUpdateObjExOutVersion);
     
     /*-------------------------------------------------------------------------+
     | Type definition for dsmGetType parameter on dsmBeginGetData()            |
